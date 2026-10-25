@@ -17,14 +17,13 @@ public class Localizer {
 
     // give the slip multiplier given an acceleration value
     // ill be changing this constantly probably
+    // these two functions probably don't do much but oh well
     private static double slipMultiplierX(double accel) {
-        // this is stupid but ykw i think it wokrs
-        return (accel < 450) ? 1 : 0;
+        return (accel < 450) ? 1 : (accel < 800) ? 0.5 : 0;
     }
 
     private static double slipMultiplierY(double accel) {
-        //
-        return (accel < 600) ? 1 : 0;
+        return (accel < 600) ? 1 : (accel < 1000) ? 0.5 : 0;
     }
 
     private final Drivetrain drivetrain = Drivetrain.getInstance();

@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.teamcode.Constants;
 
@@ -16,12 +18,11 @@ public class Indexer extends SubsystemBase {
         return shooter;
     }
 
-    private final CRServo servo;
+    private final DcMotorEx motor;
     private Indexer() {
-        servo = Constants.hardwareMap.get(CRServo.class, "ix");
+        motor = Constants.hardwareMap.get(DcMotorEx.class, "ix");
+        motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
-    public void run() {
-        servo.setPower(1);
-    }
+    public void run(double power) { motor.setPower(power); }
 }

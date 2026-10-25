@@ -38,16 +38,11 @@ public class PathTracer {
     }
 
     /**
-     * Initialize the path tracer
+     * Sets the tracer's time offset. This should be run
+     * not in initialize but in execute once it begins running.
      */
-    public void initialize() {
+    public void resetTimeOffset() {
         timeOffset = BotContainer.timestamp();
-
-        Constants.logger.addEntry("dx", () -> path.at(BotContainer.timestamp() - timeOffset).x);
-        Constants.logger.addEntry("dy", () -> path.at(BotContainer.timestamp() - timeOffset).y);
-        Constants.logger.addEntry("dh", () -> path.at(BotContainer.timestamp() - timeOffset).heading);
-        Constants.logger.addEntry("Dx", () -> driveX);
-        Constants.logger.addEntry("Dy", () -> driveY);
     }
 
     /**
@@ -59,11 +54,8 @@ public class PathTracer {
         double deltaT = timestamp - previousTimestamp;
         driveX = xPID.update(desiredPose.x, localizer.get().x, deltaT);
         driveY = yPID.update(desiredPose.y, localizer.get().y, deltaT);
-//        driveRot = headingPID.update(desiredPose.heading, localizer.get().heading, deltaT);
-//        drivetrain.driveFieldCentricBounded(driveX, driveY, driveRot, localizer.get().heading);
-        drivetrain.driveFieldAuto(driveX, driveY, 0,
-                localizer.get().heading + drivetrain.getEastHeading() // readding it
-        );
+        driveRot = headingPID.update(desiredPose.heading, localizer.get().heading, deltaT);
+        drivetrain.driveFieldAuto(driveX, driveY, driveRot, localizer.get().heading);
 
         // update previous timestamp
         previousTimestamp = timestamp;

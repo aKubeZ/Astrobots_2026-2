@@ -30,7 +30,7 @@ public class PIDController {
     }
 
     /**
-     * Updates the PID and returns the input. Be sure to initialize before using.
+     * Updates the PID and returns the input. Be sure to setTimeOffset before using.
      * @param desiredOutput the desired output of the machine
      * @param output the output of the machine
      * @param deltaT the change in time
@@ -54,4 +54,9 @@ public class PIDController {
         previousError = output;
         return kP * error + kI * integral + kD * derivative;
     }
+
+    /**
+     * Reset the integral like when the motor should stop
+     */
+    public void resetIntegral() { integral = 0; }
 }

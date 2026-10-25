@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -9,7 +10,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.autonomous.Localizer;
 import org.firstinspires.ftc.teamcode.commands.AutoCommand;
 import org.firstinspires.ftc.teamcode.commands.DataLog;
+import org.firstinspires.ftc.teamcode.commands.RunIndexer;
 import org.firstinspires.ftc.teamcode.commands.RunIntake;
+import org.firstinspires.ftc.teamcode.commands.ShootPID;
 import org.firstinspires.ftc.teamcode.commands.TestDrive;
 import org.firstinspires.ftc.teamcode.commands.Shoot;
 import org.firstinspires.ftc.teamcode.commands.TestLocalizer;
@@ -57,6 +60,8 @@ public class BotContainer {
         configBindings();
     }
 
+    boolean shooterOn = false;
+
     /**
      * Sets the commands that are run by default
      * when no other command is running.
@@ -92,10 +97,19 @@ public class BotContainer {
                                 * pilot.getRightX() // multiplier based on right trigger :3
                 ));
                 intake.setDefaultCommand(new RunIntake(
-                        () -> copilot.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)
+                        () -> -copilot.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)
                 ));
-                shooter.setDefaultCommand(new Shoot(
-                        () -> copilot.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER)
+                shooter.setDefaultCommand(new ShootPID(
+                        () -> copilot.getGamepadButton(GamepadKeys.Button.A).get()
+                                ? -Constants.shooterRPM / 4
+                                : shooterOn ? Constants.shooterRPM : 0
+                ));
+                Constants.logger.addEntry("shooter rpm", shooter::getRPM);
+                indexer.setDefaultCommand(new RunIndexer(
+                        () -> Constants.indexerPower * (
+                                (copilot.getGamepadButton(GamepadKeys.Button.X).get() ? 1 : 0)
+                                - (copilot.getGamepadButton(GamepadKeys.Button.Y).get() ? 1 : 0)
+                        ) // X runs Y reverses
                 ));
             } break;
             case DRIVETRAIN_TEST: {
@@ -118,7 +132,6 @@ public class BotContainer {
             } break;
         }
     }
-
     /**
      * Configures the commands that run when a button or trigger is pressed.
      */
@@ -126,8 +139,19 @@ public class BotContainer {
         switch (config) {
             case AUTO: break;
             case TELE: {
-                copilot.getGamepadButton(GamepadKeys.Button.A).whileHeld(indexer::run);
-            } // overflow!!!!
+                copilot.getGamepadButton(GamepadKeys.Button.B)
+                        .whenPressed(new RunCommand(intakeServos::intake))
+                        .whenReleased(new RunCommand(intakeServos::outtake));
+
+                copilot.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON).whenPressed(
+                        new InstantCommand(() -> shooterOn = true));
+                copilot.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON).whenPressed(
+                        new InstantCommand(() -> shooterOn = false));
+
+                pilot.getGamepadButton(GamepadKeys.Button.B).whenActive(
+                        () -> drivetrain.setEastHeading(gyroscope.getHeading())
+                ); // reset gyro
+            } break;
             case LOCALIZATION_TEST: // overflow!
             case LOCALIZED_DRIVE: {
                 pilot.getGamepadButton(GamepadKeys.Button.B).whenActive(

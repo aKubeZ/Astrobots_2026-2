@@ -77,5 +77,8 @@ public class PathBuilder {
      * Build the path!
      * @return the path.
      */
-    public Path build() { return path; }
+    public Path build() {
+        this.stall(30); // make it stop moving
+        return path;
+    }
 }

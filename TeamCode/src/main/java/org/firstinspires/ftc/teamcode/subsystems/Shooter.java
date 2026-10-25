@@ -23,6 +23,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public void run(double power) { motor.setPower(power); }
+    public void brake() { motor.setPower(0); }
 
     public double getRPM() { return motor.getVelocity(); }
 }

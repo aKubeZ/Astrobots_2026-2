@@ -13,6 +13,7 @@ public class AutoDrive extends CommandBase {
     private final PathTracer tracer;
     private final Path path;
     private double previousTimestamp;
+    private boolean initialized = false;
 
     public AutoDrive(Path path) {
         this.path = path;
@@ -23,16 +24,23 @@ public class AutoDrive extends CommandBase {
     @Override
     public void initialize() {
         localizer.resetPose();
-        tracer.initialize();
         previousTimestamp = BotContainer.timestamp();
     }
 
     @Override
     public void execute() {
+        if (!initialized) {
+            tracer.resetTimeOffset();
+            initialized = true;
+            return;
+        }
         double timestamp = BotContainer.timestamp();
         double deltaT = timestamp - previousTimestamp;
         localizer.update(deltaT);
         tracer.trace();
         previousTimestamp = timestamp;
     }
+
+    @Override
+    public void end(boolean interrupted) { initialized = false; }
 }

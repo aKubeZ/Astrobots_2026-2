@@ -69,15 +69,15 @@ public class Drivetrain extends SubsystemBase {
      */
     public void resetZeroPowerBehavior() {
         if (!Constants.AutoConstants.neutralDrivetrain) {
-            motorFL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            motorFR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            motorBL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            motorBR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        } else {
             motorFL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
             motorFR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
             motorBL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
             motorBR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        } else {
+            motorFL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            motorFR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            motorBL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            motorBR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
     }
 

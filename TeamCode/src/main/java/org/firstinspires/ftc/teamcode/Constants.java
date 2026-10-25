@@ -14,6 +14,8 @@ public class Constants {
     public static GamepadEx pilot = null;
     public static GamepadEx copilot = null;
     public static DataLog logger; // putting this here feels wrong
+    public static double shooterRPM = 1420;
+    public static double indexerPower = 0.2;
 
     public static class AutoConstants {
         public final static double freeInchesPerTickFL = 0.02352;
@@ -27,11 +29,14 @@ public class Constants {
         public final static double localizeYScale = 0.970866747868;
         public final static double localizeXScale = 0.923711340208;
         public static boolean neutralDrivetrain = false;
-        public final static double driveMax = 1;
+        public final static double driveMax = 0.7;
         public final static Pose robotStartPose = new Pose(0, 0, 0);
 
-        // i have NO clue why this is negative
+        // i have NO clue why this is negative OHH I GET IT NOW
+        public final static PIDData xyPID = new PIDData(-0.95, 0, 0);
         public final static PIDData headingPID = new PIDData(0.6, 0, 0);
-        public final static PIDData xyPID = new PIDData(-0.5, 0, 0);
+
+        public final static PIDData shooterPID = new PIDData(-0.005, -0.00001, 0.0000
+        );
     }
 }

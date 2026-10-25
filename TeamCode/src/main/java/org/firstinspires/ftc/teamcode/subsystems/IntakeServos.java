@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
-import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Constants;
 
@@ -16,15 +16,20 @@ public class IntakeServos extends SubsystemBase {
         return shooter;
     }
 
-    private final CRServo leftServo;
-    private final CRServo rightServo;
+    private final Servo leftServo;
+    private final Servo rightServo;
     private IntakeServos() {
-        leftServo = Constants.hardwareMap.get(CRServo.class, "li");
-        rightServo = Constants.hardwareMap.get(CRServo.class, "ri");
+        leftServo = Constants.hardwareMap.get(Servo.class, "li");
+        rightServo = Constants.hardwareMap.get(Servo.class, "ri");
     }
 
-    public void run() {
-        leftServo.setPower(1);
-        rightServo.setPower(1);
+    public void intake() {
+        leftServo.setPosition(1);
+        rightServo.setPosition(1);
+    }
+
+    public void outtake() {
+        leftServo.setPosition(0);
+        rightServo.setPosition(0);
     }
 }
