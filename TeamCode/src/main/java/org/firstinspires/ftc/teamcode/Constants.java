@@ -33,10 +33,10 @@ public class Constants {
         public final static Pose robotStartPose = new Pose(0, 0, 0);
 
         // i have NO clue why this is negative OHH I GET IT NOW
-        public final static PIDData xyPID = new PIDData(-0.95, 0, 0);
+        public final static PIDData xyPID = new PIDData(0.95, 0, 0);
         public final static PIDData headingPID = new PIDData(0.6, 0, 0);
 
-        public final static PIDData shooterPID = new PIDData(-0.005, -0.00001, 0.0000
+        public final static PIDData shooterPID = new PIDData(0.005, 0.00001, 0.0000
         );
     }
 }

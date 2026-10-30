@@ -24,12 +24,12 @@ public class IntakeServos extends SubsystemBase {
     }
 
     public void intake() {
-        leftServo.setPosition(1);
+        leftServo.setPosition(0);
         rightServo.setPosition(1);
     }
 
     public void outtake() {
-        leftServo.setPosition(0);
+        leftServo.setPosition(1);
         rightServo.setPosition(0);
     }
 }

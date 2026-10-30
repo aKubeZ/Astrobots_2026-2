@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.command.WaitCommand;
@@ -18,22 +19,26 @@ public class AutoCommand extends ParallelCommandGroup {
     private final Bot.Alliance alliance;
     private double initialTimestamp = -1;
 
-    public class ResetTimestamp extends CommandBase {
-        @Override
-        public void execute() {
-            if (initialTimestamp == -1)
-                initialTimestamp = BotContainer.timestamp();
-        }
-    }
+//    public class ResetTimestamp extends CommandBase {
+//        @Override
+//        public void execute() {
+//            if (initialTimestamp == -1)
+//                initialTimestamp = BotContainer.timestamp();
+//        }
+//
+//        @Override
+//        public boolean isFinished() { return initialTimestamp != -1; }
+//    }
 
     /**
      * Creates the auto command.
      * @param alliance The alliance of the robot
      */
     public AutoCommand(Bot.Alliance alliance) {
-        addCommands(new ResetTimestamp());
-
+//        addCommands(new ResetTimestamp());
         this.alliance = alliance;
+        addCommands(new InstantCommand(() -> initialTimestamp = BotContainer.timestamp()));
+
 //        addCommands(new AutoDrive(new PathBuilder(0, 0, 0)
 //                .moveTo(0, 72, Math.PI / 2, 3)
 //                .moveTo(0, 72, 0, 1)

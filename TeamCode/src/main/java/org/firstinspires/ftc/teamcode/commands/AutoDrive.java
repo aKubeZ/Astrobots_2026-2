@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 
 public class AutoDrive extends CommandBase {
     private final Localizer localizer = Localizer.getInstance();
+    private final Drivetrain drivetrain = Drivetrain.getInstance();
     private final PathTracer tracer;
     private final Path path;
     private double previousTimestamp;
@@ -18,12 +19,13 @@ public class AutoDrive extends CommandBase {
     public AutoDrive(Path path) {
         this.path = path;
         tracer = new PathTracer(localizer::getPose, path);
-        addRequirements(Drivetrain.getInstance()); // this is stupid
+        addRequirements(drivetrain); // this is stupid
     }
 
     @Override
     public void initialize() {
         localizer.resetPose();
+        drivetrain.setEastHeading(-path.at(0).heading + localizer.getPose().heading);
         previousTimestamp = BotContainer.timestamp();
     }
 

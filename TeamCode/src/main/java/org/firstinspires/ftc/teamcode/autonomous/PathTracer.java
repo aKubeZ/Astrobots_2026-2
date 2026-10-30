@@ -54,7 +54,9 @@ public class PathTracer {
         double deltaT = timestamp - previousTimestamp;
         driveX = xPID.update(desiredPose.x, localizer.get().x, deltaT);
         driveY = yPID.update(desiredPose.y, localizer.get().y, deltaT);
-        driveRot = headingPID.update(desiredPose.heading, localizer.get().heading, deltaT);
+
+        // negative rot because positive should be ccw.
+        driveRot = -headingPID.update(desiredPose.heading, localizer.get().heading, deltaT);
         drivetrain.driveFieldAuto(driveX, driveY, driveRot, localizer.get().heading);
 
         // update previous timestamp

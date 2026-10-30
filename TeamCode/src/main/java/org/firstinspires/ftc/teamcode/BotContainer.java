@@ -8,22 +8,10 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.autonomous.Localizer;
-import org.firstinspires.ftc.teamcode.commands.AutoCommand;
 import org.firstinspires.ftc.teamcode.commands.DataLog;
-import org.firstinspires.ftc.teamcode.commands.RunIndexer;
-import org.firstinspires.ftc.teamcode.commands.RunIntake;
-import org.firstinspires.ftc.teamcode.commands.ShootPID;
-import org.firstinspires.ftc.teamcode.commands.TestDrive;
-import org.firstinspires.ftc.teamcode.commands.Shoot;
-import org.firstinspires.ftc.teamcode.commands.TestLocalizer;
-import org.firstinspires.ftc.teamcode.subsystems.Gyroscope;
 
-import org.firstinspires.ftc.teamcode.commands.Drive;
-import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
-import org.firstinspires.ftc.teamcode.subsystems.Indexer;
-import org.firstinspires.ftc.teamcode.subsystems.IntakeServos;
-import org.firstinspires.ftc.teamcode.subsystems.Intake;
-import org.firstinspires.ftc.teamcode.subsystems.Shooter;
+import org.firstinspires.ftc.teamcode.subsystems.*;
+import org.firstinspires.ftc.teamcode.commands.*;
 
 public class BotContainer {
     private static final ElapsedTime stopwatch = new ElapsedTime();
@@ -137,21 +125,23 @@ public class BotContainer {
      */
     private void configBindings() {
         switch (config) {
-            case AUTO: break;
+            case AUTO:
+                break;
             case TELE: {
-                copilot.getGamepadButton(GamepadKeys.Button.B)
-                        .whenPressed(new RunCommand(intakeServos::intake))
-                        .whenReleased(new RunCommand(intakeServos::outtake));
-
                 copilot.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON).whenPressed(
                         new InstantCommand(() -> shooterOn = true));
                 copilot.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON).whenPressed(
-                        new InstantCommand(() -> shooterOn = false));
+                        new InstantCommand(() -> shooterOn = false)); // shooter toggle
+
+                copilot.getGamepadButton(GamepadKeys.Button.B)
+                        .whenPressed(intakeServos::intake)
+                        .whenReleased(intakeServos::outtake); // intake servos
 
                 pilot.getGamepadButton(GamepadKeys.Button.B).whenActive(
                         () -> drivetrain.setEastHeading(gyroscope.getHeading())
                 ); // reset gyro
-            } break;
+            }
+            break;
             case LOCALIZATION_TEST: // overflow!
             case LOCALIZED_DRIVE: {
                 pilot.getGamepadButton(GamepadKeys.Button.B).whenActive(
@@ -161,10 +151,12 @@ public class BotContainer {
                 pilot.getGamepadButton(GamepadKeys.Button.A).whenActive(
                         () -> localizer.resetPose()
                 );
-            } break;
+            }
+            break;
             case DRIVETRAIN_TEST: {
 
-            } break;
+            }
+            break;
         }
     }
 

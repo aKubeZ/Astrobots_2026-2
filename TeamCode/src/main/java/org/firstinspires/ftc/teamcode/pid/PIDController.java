@@ -37,7 +37,7 @@ public class PIDController {
      * @return the new input to be used
      */
     public double update(double desiredOutput, double output, double deltaT) {
-        double error = output - desiredOutput;
+        double error = desiredOutput - output;
         if (cyclic) {
             if (error > Math.PI) error -= 2 * Math.PI;
             else if (error < -Math.PI) error += 2 * Math.PI;
