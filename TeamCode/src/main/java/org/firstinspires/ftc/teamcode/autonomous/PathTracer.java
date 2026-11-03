@@ -23,9 +23,6 @@ public class PathTracer {
 
     private double timeOffset;
     private double previousTimestamp;
-    private double driveX = 0;
-    private double driveY = 0;
-    private double driveRot = 0;
 
     /**
      * Create a path tracer.
@@ -52,11 +49,11 @@ public class PathTracer {
         double timestamp = BotContainer.timestamp() - timeOffset;
         Pose desiredPose = path.at(timestamp);
         double deltaT = timestamp - previousTimestamp;
-        driveX = xPID.update(desiredPose.x, localizer.get().x, deltaT);
-        driveY = yPID.update(desiredPose.y, localizer.get().y, deltaT);
+        double driveX = xPID.update(desiredPose.x, localizer.get().x, deltaT);
+        double driveY = yPID.update(desiredPose.y, localizer.get().y, deltaT);
 
         // negative rot because positive should be ccw.
-        driveRot = -headingPID.update(desiredPose.heading, localizer.get().heading, deltaT);
+        double driveRot = -headingPID.update(desiredPose.heading, localizer.get().heading, deltaT);
         drivetrain.driveFieldAuto(driveX, driveY, driveRot, localizer.get().heading);
 
         // update previous timestamp

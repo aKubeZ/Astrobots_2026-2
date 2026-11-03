@@ -7,9 +7,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Constants;
 
 /**
- * Gyroscope subsystem.
+ * Gyroscope (not really a subsystem but).
  */
-public class Gyroscope extends SubsystemBase {
+public class Gyroscope {
     private static Gyroscope instance = null;
 
     /**

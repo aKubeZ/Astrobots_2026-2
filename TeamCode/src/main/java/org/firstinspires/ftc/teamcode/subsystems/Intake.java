@@ -17,12 +17,15 @@ public class Intake extends SubsystemBase {
     }
 
     private final DcMotorEx motor;
+    private final boolean disabled = !Constants.SubsystemToggle.intake;
     private Intake() {
-        motor = Constants.hardwareMap.get(DcMotorEx.class, "in");
+        motor = disabled ? null : Constants.hardwareMap.get(DcMotorEx.class, "in");
+        if (disabled) return;
         motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     public void run(double power) {
+        if (disabled) return;
         motor.setPower(power);
     }
 }

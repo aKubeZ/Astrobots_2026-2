@@ -45,12 +45,12 @@ public class DriveHeadingPID extends CommandBase {
     }
 
     @Override
-    public void execute() {
-        if (previousTimestamp == -1) {
-            previousTimestamp = BotContainer.timestamp();
-            return;
-        }
+    public void initialize() {
+        previousTimestamp = BotContainer.timestamp();
+    }
 
+    @Override
+    public void execute() {
         double timestamp = BotContainer.timestamp();
         double deltaT = timestamp - previousTimestamp;
         double currentHeading = gyroscope.getHeading();

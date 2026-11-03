@@ -163,6 +163,4 @@ public class Localizer {
         pose = Constants.AutoConstants.robotStartPose;
         initialized = false;
     }
-
-    public double getNetWheelAccel() { return netWheelAccel; }
 }

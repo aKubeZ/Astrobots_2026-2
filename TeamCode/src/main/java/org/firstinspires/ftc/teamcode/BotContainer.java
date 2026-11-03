@@ -160,8 +160,7 @@ public class BotContainer {
             break;
             case DRIVETRAIN_TEST: {
 
-            }
-            break;
+            } break;
         }
     }
 

@@ -55,11 +55,14 @@ public class Drivetrain extends SubsystemBase {
     private final DcMotorEx motorBL;
     private final DcMotorEx motorBR;
     private double eastHeading = 0;
+    private final boolean disabled = !Constants.SubsystemToggle.driveTrain;
+
     private Drivetrain() {
-        motorFL = Constants.hardwareMap.get(DcMotorEx.class, "fl");
-        motorFR = Constants.hardwareMap.get(DcMotorEx.class, "fr");
-        motorBL = Constants.hardwareMap.get(DcMotorEx.class, "bl");
-        motorBR = Constants.hardwareMap.get(DcMotorEx.class, "br");
+        motorFL = disabled ? null : Constants.hardwareMap.get(DcMotorEx.class, "fl");
+        motorFR = disabled ? null : Constants.hardwareMap.get(DcMotorEx.class, "fr");
+        motorBL = disabled ? null : Constants.hardwareMap.get(DcMotorEx.class, "bl");
+        motorBR = disabled ? null : Constants.hardwareMap.get(DcMotorEx.class, "br");
+        if (disabled) return;
         resetZeroPowerBehavior();
     }
 
@@ -68,6 +71,7 @@ public class Drivetrain extends SubsystemBase {
      * Constants.AutoConstants.neutralDrivetrain.
      */
     public void resetZeroPowerBehavior() {
+        if (disabled) return;
         if (!Constants.AutoConstants.neutralDrivetrain) {
             motorFL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
             motorFR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -101,6 +105,7 @@ public class Drivetrain extends SubsystemBase {
      * @param rot positive spins it clockwise, negative spins it counter-clockwise
      */
     public void driveRobotCentric(double x, double y, double rot) {
+        if (disabled) return;
         double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rot), 1);
         motorFL.setPower((-y - x - rot) / denominator);
         motorFR.setPower((-y + x + rot) / denominator);
@@ -115,6 +120,7 @@ public class Drivetrain extends SubsystemBase {
      * @param rot positive spins it clockwise, negative spins it counter-clockwise
      */
     public void driveFieldCentric(double x, double y, double rot, double heading) {
+        if (disabled) return;
         /*
             [ cos   -sin ] [ x ] = [ x cos - y sin ]
             [ sin    cos ] [ y ] = [ x sin + y cos ]
@@ -135,6 +141,7 @@ public class Drivetrain extends SubsystemBase {
      * @param rot positive spins it clockwise, negative spins it counter-clockwise
      */
     public void driveFieldAuto(double x, double y, double rot, double heading) {
+        if (disabled) return;
         double bound = Constants.AutoConstants.driveMax;
         double boundedX = Math.max(Math.min(x, bound), -bound);
         double boundedY = Math.max(Math.min(y, bound), -bound);
@@ -147,22 +154,39 @@ public class Drivetrain extends SubsystemBase {
      * Halts every motor.
      */
     public void brake() {
+        if (disabled) return;
         motorFL.setPower(0);
         motorFR.setPower(0);
         motorBL.setPower(0);
         motorBR.setPower(0);
     }
 
-    public void setFLPower(double power) { motorFL.setPower(power); }
-    public void setFRPower(double power) { motorFR.setPower(power); }
-    public void setBLPower(double power) { motorBL.setPower(power); }
-    public void setBRPower(double power) { motorBR.setPower(power); }
+    public void setFLPower(double power) {
+        if (disabled) return;
+        motorFL.setPower(power);
+    }
+
+    public void setFRPower(double power) {
+        if (disabled) return;
+        motorFR.setPower(power);
+    }
+
+    public void setBLPower(double power) {
+        if (disabled) return;
+        motorBL.setPower(power);
+    }
+
+    public void setBRPower(double power) {
+        if (disabled) return;
+        motorBR.setPower(power);
+    }
 
     /**
      * Returns the current drive state with each motor's position.
      * @return the drive state.
      */
     public DriveState getDriveState() {
+        if (disabled) return new DriveState(0, 0, 0, 0, 0, 0, 0, 0);
         return new DriveState(
                 motorFL.getCurrentPosition(),
                 motorFR.getCurrentPosition(),
@@ -174,28 +198,4 @@ public class Drivetrain extends SubsystemBase {
                 motorBR.getPower()
         );
     }
-
-    /**
-     * Returns the current position of the front left motor
-     * @return the front left motor's position
-     */
-    public double getFLPosition() { return motorFL.getCurrentPosition(); }
-
-    /**
-     * Returns the current position of the front right motor
-     * @return the front right motor's position
-     */
-    public double getFRPosition() { return motorFR.getCurrentPosition(); }
-
-    /**
-     * Returns the current position of the back left motor
-     * @return the back left motor's position
-     */
-    public double getBLPosition() { return motorBL.getCurrentPosition(); }
-
-    /**
-     * Returns the current position of the back right motor
-     * @return the back right motor's position
-     */
-    public double getBRPosition() { return motorBR.getCurrentPosition(); }
 }

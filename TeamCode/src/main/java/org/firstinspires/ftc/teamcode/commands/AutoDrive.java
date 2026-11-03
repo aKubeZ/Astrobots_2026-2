@@ -8,6 +8,9 @@ import org.firstinspires.ftc.teamcode.autonomous.Path;
 import org.firstinspires.ftc.teamcode.autonomous.PathTracer;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 
+/**
+ * A command implementation of PathTracer.
+ */
 public class AutoDrive extends CommandBase {
     private final Localizer localizer = Localizer.getInstance();
     private final Drivetrain drivetrain = Drivetrain.getInstance();
@@ -16,10 +19,14 @@ public class AutoDrive extends CommandBase {
     private double previousTimestamp;
     private boolean initialized = false;
 
+    /**
+     * Create an AutoDrive command given a path.
+     * @param path the path to follow.
+     */
     public AutoDrive(Path path) {
         this.path = path;
         tracer = new PathTracer(localizer::getPose, path);
-        addRequirements(drivetrain); // this is stupid
+        addRequirements(drivetrain);
     }
 
     @Override

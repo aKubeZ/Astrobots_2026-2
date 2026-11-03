@@ -17,6 +17,14 @@ public class Constants {
     public static double shooterRPM = 1420;
     public static double indexerPower = 0.2;
 
+    public static class SubsystemToggle {
+        public static boolean driveTrain = true;
+        public static boolean indexer = true;
+        public static boolean intake = true;
+        public static boolean intakeServos = true;
+        public static boolean shooter = true;
+    }
+
     public static class AutoConstants {
         public final static double freeInchesPerTickFL = 0.02352;
         public final static double deadInchesPerTickFL = 0.03597;

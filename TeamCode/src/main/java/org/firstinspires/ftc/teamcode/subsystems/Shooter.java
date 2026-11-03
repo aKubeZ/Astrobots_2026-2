@@ -17,13 +17,25 @@ public class Shooter extends SubsystemBase {
     }
 
     private final DcMotorEx motor;
+    private final boolean disabled = !Constants.SubsystemToggle.shooter;
     private Shooter() {
-        motor = Constants.hardwareMap.get(DcMotorEx.class, "sh");
+        motor = disabled ? null : Constants.hardwareMap.get(DcMotorEx.class, "sh");
+        if (disabled) return;
         motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
-    public void run(double power) { motor.setPower(power); }
-    public void brake() { motor.setPower(0); }
+    public void run(double power) {
+        if (disabled) return;
+        motor.setPower(power);
+    }
 
-    public double getRPM() { return motor.getVelocity(); }
+    public void brake() {
+        if (disabled) return;
+        motor.setPower(0);
+    }
+
+    public double getRPM() {
+        if (disabled) return 0;
+        return motor.getVelocity();
+    }
 }

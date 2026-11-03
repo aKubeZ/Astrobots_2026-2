@@ -19,10 +19,19 @@ public class Indexer extends SubsystemBase {
     }
 
     private final DcMotorEx motor;
+    private final boolean disabled = !Constants.SubsystemToggle.indexer;
     private Indexer() {
-        motor = Constants.hardwareMap.get(DcMotorEx.class, "ix");
+        motor = disabled ? null : Constants.hardwareMap.get(DcMotorEx.class, "ix");
+        if (disabled) return;
         motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
-    public void run(double power) { motor.setPower(power); }
+    /**
+     * Run the indexer at a given power.
+     * @param power the power to run the indexer.
+     */
+    public void run(double power) {
+        if (disabled) return;
+        motor.setPower(power);
+    }
 }
