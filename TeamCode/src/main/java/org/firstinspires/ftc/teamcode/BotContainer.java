@@ -116,7 +116,12 @@ public class BotContainer {
                 // UP RIGHT LEFT DOWN will correspond to the negative rotation of the FL FR BL BR motors
             } break;
             case CUSTOM: {
-                Constants.logger.addEntry("fl", () -> drivetrain.getDriveState().flPower);
+                drivetrain.setDefaultCommand(new DriveHeadingPID(
+                        pilot::getLeftX,
+                        pilot::getLeftY,
+                        pilot::getRightX,
+                        pilot::getRightY
+                ));
             } break;
         }
     }
