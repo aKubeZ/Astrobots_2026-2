@@ -54,8 +54,8 @@ public class Drivetrain extends SubsystemBase {
     private final DcMotorEx motorFR;
     private final DcMotorEx motorBL;
     private final DcMotorEx motorBR;
-    private double eastHeading = 0;
-    private final boolean disabled = !Constants.SubsystemToggle.driveTrain;
+    private double headingOrigin = 0;
+    private final boolean disabled = !Constants.SubsystemToggle.drivetrain;
 
     private Drivetrain() {
         motorFL = disabled ? null : Constants.hardwareMap.get(DcMotorEx.class, "fl");
@@ -90,13 +90,13 @@ public class Drivetrain extends SubsystemBase {
      * to base the field-centric drive on.
      * @param heading the initial heading
      */
-    public void setEastHeading(double heading) { eastHeading = heading; }
+    public void setHeadingOrigin(double heading) { headingOrigin = heading; }
 
     /**
      * Returns the initial heading of the robot for a reference.
      * @return the initial heading
      */
-    public double getEastHeading() { return eastHeading; }
+    public double getHeadingOrigin() { return headingOrigin; }
 
     /**
      * Drives the robot using robot centric.
@@ -107,7 +107,7 @@ public class Drivetrain extends SubsystemBase {
     public void driveRobotCentric(double x, double y, double rot) {
         if (disabled) return;
         double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rot), 1);
-        motorFL.setPower((-y - x - rot) / denominator);
+        motorFL.setPower((y + x + rot) / denominator);
         motorFR.setPower((-y + x + rot) / denominator);
         motorBL.setPower((y - x + rot) / denominator);
         motorBR.setPower((y + x - rot) / denominator);
@@ -118,6 +118,7 @@ public class Drivetrain extends SubsystemBase {
      * @param x positive moves it right, negative moves it left
      * @param y positive moves it forwards, negative moves it backwards
      * @param rot positive spins it clockwise, negative spins it counter-clockwise
+     * @param heading the absolute heading; origin is set by headingOrigin
      */
     public void driveFieldCentric(double x, double y, double rot, double heading) {
         if (disabled) return;
@@ -125,7 +126,7 @@ public class Drivetrain extends SubsystemBase {
             [ cos   -sin ] [ x ] = [ x cos - y sin ]
             [ sin    cos ] [ y ] = [ x sin + y cos ]
          */
-        double angle = -(heading - eastHeading); // flipped bc clockwise
+        double angle = -(heading - headingOrigin); // flipped bc clockwise
         double sin = Math.sin(angle);
         double cos = Math.cos(angle);
         double robotX = x * cos - y * sin;
@@ -139,6 +140,7 @@ public class Drivetrain extends SubsystemBase {
      * @param x positive moves it right, negative moves it left
      * @param y positive moves it forwards, negative moves it backwards
      * @param rot positive spins it clockwise, negative spins it counter-clockwise
+     * @param heading the absolute heading; origin is set by headingOrigin
      */
     public void driveFieldAuto(double x, double y, double rot, double heading) {
         if (disabled) return;
@@ -146,8 +148,7 @@ public class Drivetrain extends SubsystemBase {
         double boundedX = Math.max(Math.min(x, bound), -bound);
         double boundedY = Math.max(Math.min(y, bound), -bound);
         double boundedRot = Math.max(Math.min(rot, bound), -bound);
-        driveFieldCentric(boundedX, boundedY, boundedRot, heading + eastHeading);
-        // heading + eastHeading is a bit dumb but
+        driveFieldCentric(boundedX, boundedY, boundedRot, heading);
     }
 
     /**

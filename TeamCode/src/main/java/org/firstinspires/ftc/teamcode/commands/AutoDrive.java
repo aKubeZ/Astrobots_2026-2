@@ -6,7 +6,9 @@ import org.firstinspires.ftc.teamcode.BotContainer;
 import org.firstinspires.ftc.teamcode.autonomous.Localizer;
 import org.firstinspires.ftc.teamcode.autonomous.Path;
 import org.firstinspires.ftc.teamcode.autonomous.PathTracer;
+import org.firstinspires.ftc.teamcode.autonomous.Pose;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
+import org.firstinspires.ftc.teamcode.subsystems.Gyroscope;
 
 /**
  * A command implementation of PathTracer.
@@ -14,6 +16,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 public class AutoDrive extends CommandBase {
     private final Localizer localizer = Localizer.getInstance();
     private final Drivetrain drivetrain = Drivetrain.getInstance();
+    private final Gyroscope gyroscope = Gyroscope.getInstance();
     private final PathTracer tracer;
     private final Path path;
     private double previousTimestamp;
@@ -31,8 +34,9 @@ public class AutoDrive extends CommandBase {
 
     @Override
     public void initialize() {
-        localizer.resetPose();
-        drivetrain.setEastHeading(-path.at(0).heading + localizer.getPose().heading);
+        Pose startPose = path.at(0);
+        drivetrain.setHeadingOrigin(-startPose.heading + gyroscope.getHeading());
+        localizer.resetPose(startPose);
         previousTimestamp = BotContainer.timestamp();
     }
 

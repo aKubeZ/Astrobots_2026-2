@@ -2,12 +2,12 @@ package org.firstinspires.ftc.teamcode;
 
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.InstantCommand;
-import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.autonomous.Localizer;
+import org.firstinspires.ftc.teamcode.autonomous.Pose;
 import org.firstinspires.ftc.teamcode.commands.DataLog;
 
 import org.firstinspires.ftc.teamcode.subsystems.*;
@@ -116,12 +116,14 @@ public class BotContainer {
                 // UP RIGHT LEFT DOWN will correspond to the negative rotation of the FL FR BL BR motors
             } break;
             case CUSTOM: {
-                drivetrain.setDefaultCommand(new DriveHeadingPID(
-                        pilot::getLeftX,
-                        pilot::getLeftY,
-                        pilot::getRightX,
-                        pilot::getRightY
+                intake.setDefaultCommand(new RunIntake(
+                        () -> copilot.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)
                 ));
+                indexer.setDefaultCommand(new RunIndexer(
+                        () -> Constants.indexerPower * (
+                                (copilot.getGamepadButton(GamepadKeys.Button.X).get() ? 1 : 0)
+                                        - (copilot.getGamepadButton(GamepadKeys.Button.Y).get() ? 1 : 0)
+                        ))); // X runs Y reverses
             } break;
         }
     }
@@ -143,18 +145,18 @@ public class BotContainer {
                         .whenReleased(intakeServos::outtake); // intake servos
 
                 pilot.getGamepadButton(GamepadKeys.Button.B).whenActive(
-                        () -> drivetrain.setEastHeading(gyroscope.getHeading())
+                        () -> drivetrain.setHeadingOrigin(gyroscope.getHeading())
                 ); // reset gyro
             }
             break;
             case LOCALIZATION_TEST: // overflow!
             case LOCALIZED_DRIVE: {
                 pilot.getGamepadButton(GamepadKeys.Button.B).whenActive(
-                        () -> drivetrain.setEastHeading(gyroscope.getHeading())
+                        () -> drivetrain.setHeadingOrigin(gyroscope.getHeading())
                 );
 
                 pilot.getGamepadButton(GamepadKeys.Button.A).whenActive(
-                        () -> localizer.resetPose()
+                        () -> localizer.resetPose(new Pose(0, 0, 0))
                 );
             }
             break;

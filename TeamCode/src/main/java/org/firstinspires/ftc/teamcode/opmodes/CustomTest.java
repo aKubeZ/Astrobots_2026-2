@@ -14,7 +14,6 @@ import org.firstinspires.ftc.teamcode.Constants;
 @TeleOp(name = "custom op")
 public class CustomTest extends CommandOpMode {
     private Robot bot;
-
     @Override
     public void initialize() {
         Constants.hardwareMap = hardwareMap;
@@ -23,6 +22,9 @@ public class CustomTest extends CommandOpMode {
         Constants.copilot = new GamepadEx(gamepad2);
         Constants.AutoConstants.neutralDrivetrain = false;
 
+        Constants.SubsystemToggle.intakeServos = false;
+        Constants.SubsystemToggle.drivetrain = false;
+        Constants.SubsystemToggle.shooter = false;
         bot = new Bot(Bot.OpMode.TELEOP, Bot.Alliance.BLUE, Bot.Config.CUSTOM);
     }
 }

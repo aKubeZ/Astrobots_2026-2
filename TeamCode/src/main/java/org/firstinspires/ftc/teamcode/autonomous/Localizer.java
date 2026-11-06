@@ -42,6 +42,9 @@ public class Localizer {
     private boolean initialized = false;
     private boolean initializedAgain = false;
 
+    // constant -'ed to the heading
+    private double headingOrigin = 0;
+
     private Pose pose = new Pose(0, 0, 0);
 
     private Localizer() { }
@@ -110,23 +113,23 @@ public class Localizer {
         }
 
         /* essentially just this but inverted
-            [ fl ]   [ -1  -1  -1 ]
+            [ fl ]   [  1   1   1 ] fl now inverted wth
             [ fr ] = [  1  -1   1 ] [ x ]
             [ bl ]   [ -1   1   1 ] [ y ]
             [ br ]   [  1   1  -1 ] [ t ]
          */
         double dXRelative = slipMultiplierX(netWheelAccel) *
                 Constants.AutoConstants.localizeXScale
-                * (-flSpeed + frSpeed - blSpeed + brSpeed) / 4;
+                * (flSpeed + frSpeed - blSpeed + brSpeed) / 4;
         double dYRelative = slipMultiplierY(netWheelAccel) *
                 Constants.AutoConstants.localizeYScale
-                * (-flSpeed - frSpeed + blSpeed + brSpeed) / 4;
+                * (flSpeed - frSpeed + blSpeed + brSpeed) / 4;
 
         /* Rotate based on heading
             [ cos   -sin ] [ x ] = [ x cos - y sin ]
             [ sin    cos ] [ y ] = [ x sin + y cos ]
          */
-        double heading = gyroscope.getHeading() - drivetrain.getEastHeading();
+        double heading = gyroscope.getHeading() - drivetrain.getHeadingOrigin();
         double cos = Math.cos(heading);
         double sin = Math.sin(heading);
         double dX = dXRelative * cos - dYRelative * sin;
@@ -157,10 +160,11 @@ public class Localizer {
     public Pose getPose() { return pose; }
 
     /**
-     * Reset the pose to the robot start pose.
+     * Reset the robot's sense of position.
+     * @param pose the pose to reset the robot to.
      */
-    public void resetPose() {
-        pose = Constants.AutoConstants.robotStartPose;
+    public void resetPose(Pose pose) {
+        this.pose = pose;
         initialized = false;
     }
 }

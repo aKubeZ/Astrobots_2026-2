@@ -27,24 +27,29 @@ public class AutoCommand extends ParallelCommandGroup {
         this.alliance = alliance;
         addCommands(new InstantCommand(() -> initialTimestamp = BotContainer.timestamp()));
 
-        addCommands(new AutoDrive(new PathBuilder(0, 0, 0)
-                .stall(20)
-                .moveTo(0, -12, 0, 1)
-                .moveTo(60, -120, 0, 7)
+        addCommands(new AutoDrive(new PathBuilder(10, 10, 0)
+                .moveTo(20, 20, 0, 1)
                 .build()
         ));
 
-        addCommands(
-                new ShootPID(() -> {
-                    double t = BotContainer.timestamp() - initialTimestamp;
-                    if (t < 20) return Constants.shooterRPM;
-                    else return 0;
-                }),
-                new RunIndexer(() -> {
-                    double t = BotContainer.timestamp() - initialTimestamp;
-                    if (t < 6.7) return 0;
-                    else return Constants.indexerPower;
-                })
-        );
+//        addCommands(new AutoDrive(new PathBuilder(0, 0, 0)
+//                .stall(20)
+//                .moveTo(0, -12, 0, 1)
+//                .moveTo(60, -120, 0, 7)
+//                .build()
+//        ));
+//
+//        addCommands(
+//                new ShootPID(() -> {
+//                    double t = BotContainer.timestamp() - initialTimestamp;
+//                    if (t < 20) return Constants.shooterRPM;
+//                    else return 0;
+//                }),
+//                new RunIndexer(() -> {
+//                    double t = BotContainer.timestamp() - initialTimestamp;
+//                    if (t < 6.7) return 0;
+//                    else return Constants.indexerPower;
+//                })
+//        );
     }
 }

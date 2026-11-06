@@ -18,7 +18,7 @@ public class Constants {
     public static double indexerPower = 0.2;
 
     public static class SubsystemToggle {
-        public static boolean driveTrain = true;
+        public static boolean drivetrain = true;
         public static boolean indexer = true;
         public static boolean intake = true;
         public static boolean intakeServos = true;
@@ -38,7 +38,6 @@ public class Constants {
         public final static double localizeXScale = 0.923711340208;
         public static boolean neutralDrivetrain = false;
         public final static double driveMax = 0.7;
-        public final static Pose robotStartPose = new Pose(0, 0, 0);
 
         // i have NO clue why this is negative OHH I GET IT NOW
         public final static PIDData xyPID = new PIDData(0.95, 0, 0);
