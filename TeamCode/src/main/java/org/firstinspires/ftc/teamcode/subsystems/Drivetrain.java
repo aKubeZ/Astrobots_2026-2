@@ -72,7 +72,7 @@ public class Drivetrain extends SubsystemBase {
      */
     public void resetZeroPowerBehavior() {
         if (disabled) return;
-        if (!Constants.AutoConstants.neutralDrivetrain) {
+        if (Constants.AutoConstants.neutralDrivetrain) {
             motorFL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
             motorFR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
             motorBL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -86,15 +86,15 @@ public class Drivetrain extends SubsystemBase {
     }
 
     /**
-     * Sets the initial heading of the robot, to make a reference
+     * Sets the heading origin of the robot, to make a reference
      * to base the field-centric drive on.
      * @param heading the initial heading
      */
     public void setHeadingOrigin(double heading) { headingOrigin = heading; }
 
     /**
-     * Returns the initial heading of the robot for a reference.
-     * @return the initial heading
+     * Returns the heading origin of the robot for a reference.
+     * @return the heading origin
      */
     public double getHeadingOrigin() { return headingOrigin; }
 

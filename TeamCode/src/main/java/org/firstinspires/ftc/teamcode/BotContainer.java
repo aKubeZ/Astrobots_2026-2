@@ -85,7 +85,7 @@ public class BotContainer {
                                 * pilot.getRightX() // multiplier based on right trigger :3
                 ));
                 intake.setDefaultCommand(new RunIntake(
-                        () -> -copilot.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)
+                        () -> Constants.intakePower * copilot.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)
                 ));
                 shooter.setDefaultCommand(new ShootPID(
                         () -> copilot.getGamepadButton(GamepadKeys.Button.A).get()
@@ -116,14 +116,7 @@ public class BotContainer {
                 // UP RIGHT LEFT DOWN will correspond to the negative rotation of the FL FR BL BR motors
             } break;
             case CUSTOM: {
-                intake.setDefaultCommand(new RunIntake(
-                        () -> copilot.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)
-                ));
-                indexer.setDefaultCommand(new RunIndexer(
-                        () -> Constants.indexerPower * (
-                                (copilot.getGamepadButton(GamepadKeys.Button.X).get() ? 1 : 0)
-                                        - (copilot.getGamepadButton(GamepadKeys.Button.Y).get() ? 1 : 0)
-                        ))); // X runs Y reverses
+
             } break;
         }
     }

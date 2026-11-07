@@ -15,6 +15,7 @@ public class Constants {
     public static GamepadEx copilot = null;
     public static DataLog logger; // putting this here feels wrong
     public static double shooterRPM = 1420;
+    public static double intakePower = 1;
     public static double indexerPower = 0.2;
 
     public static class SubsystemToggle {
@@ -40,7 +41,7 @@ public class Constants {
         public final static double driveMax = 0.7;
 
         // i have NO clue why this is negative OHH I GET IT NOW
-        public final static PIDData xyPID = new PIDData(0.95, 0, 0);
+        public final static PIDData xyPID = new PIDData(1, 0, 0);
         public final static PIDData headingPID = new PIDData(0.6, 0, 0);
 
         public final static PIDData shooterPID = new PIDData(0.005, 0.00001, 0.0000
