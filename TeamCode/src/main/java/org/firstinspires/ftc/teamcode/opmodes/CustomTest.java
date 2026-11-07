@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.Constants;
 /**
  * Op mode to test specific subsystems
  */
-@TeleOp(name = "custom op")
+@TeleOp(name = "custom op", group = "test")
 public class CustomTest extends CommandOpMode {
     private Robot bot;
     @Override

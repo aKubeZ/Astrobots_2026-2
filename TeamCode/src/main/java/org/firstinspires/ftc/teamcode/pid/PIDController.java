@@ -19,7 +19,7 @@ public class PIDController {
     /**
      * Create a PID controller given PID data
      * @param pidData the object that stores the proportional, derivative, and integral constants
-     * @param cyclic set this this to true if this is PID for the heading.
+     * @param cyclic set this to true if this is PID for the heading.
      *               This accounts for the jump in heading from pi to -pi.
      */
     public PIDController(PIDData pidData, boolean cyclic) {

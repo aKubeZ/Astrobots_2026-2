@@ -22,6 +22,7 @@ public class Bot extends Robot {
         DRIVETRAIN_TEST,
         LOCALIZATION_TEST,
         LOCALIZED_DRIVE,
+        ENCODER_DRIVE,
         CUSTOM,
     }
 

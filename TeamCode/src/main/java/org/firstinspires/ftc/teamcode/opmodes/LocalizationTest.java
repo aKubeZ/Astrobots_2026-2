@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Constants;
 
-@Autonomous(name = "localization test")
+@Autonomous(name = "localization test", group = "test")
 public class LocalizationTest extends CommandOpMode {
     private Robot bot;
 

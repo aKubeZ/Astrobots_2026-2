@@ -27,8 +27,8 @@ public class AutoCommand extends ParallelCommandGroup {
         this.alliance = alliance;
         addCommands(new InstantCommand(() -> initialTimestamp = BotContainer.timestamp()));
 
-        addCommands(new AutoDrive(new PathBuilder(10, 10, 0)
-                .moveTo(20, 20, 0, 1)
+        addCommands(new AutoDrive(new PathBuilder(10, 10, 1)
+                .moveTo(-20, 20, -1, 3)
                 .build()
         ));
 

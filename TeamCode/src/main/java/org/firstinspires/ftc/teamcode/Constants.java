@@ -27,24 +27,23 @@ public class Constants {
     }
 
     public static class AutoConstants {
-        public final static double freeInchesPerTickFL = 0.02352;
-        public final static double deadInchesPerTickFL = 0.03597;
-        public final static double freeInchesPerTickFR = 0.02261;
-        public final static double deadInchesPerTickFR = 0.03151;
-        public final static double freeInchesPerTickBL = 0.02302;
-        public final static double deadInchesPerTickBL = 0.02418;
-        public final static double freeInchesPerTickBR = 0.02284;
-        public final static double deadInchesPerTickBR = 0.03403;
-        public final static double localizeYScale = 0.970866747868;
-        public final static double localizeXScale = 0.923711340208;
+        public final static double freeInchesPerTickFL = 0.0227344490054;
+        public final static double deadInchesPerTickFL = 0.0338107536981;
+        public final static double freeInchesPerTickFR = 0.0237388724036;
+        public final static double deadInchesPerTickFR = 0.0260964117434;
+        public final static double freeInchesPerTickBL = 0.0230215827338;
+        public final static double deadInchesPerTickBL = 0.0247465200206;
+        public final static double freeInchesPerTickBR = 0.0227380388441;
+        public final static double deadInchesPerTickBR = 0.0235140431091;
+        public final static double localizeYScale = 0.852045797462;
+        public final static double localizeXScale = 0.868071254182;
         public static boolean neutralDrivetrain = false;
         public final static double driveMax = 0.7;
 
-        // i have NO clue why this is negative OHH I GET IT NOW
-        public final static PIDData xyPID = new PIDData(1, 0, 0);
-        public final static PIDData headingPID = new PIDData(0.6, 0, 0);
+        public static PIDData xyPID = new PIDData(1, 0, 0);
+        public static PIDData headingPID = new PIDData(0.6, 0, 0);
 
-        public final static PIDData shooterPID = new PIDData(0.005, 0.00001, 0.0000
+        public static PIDData shooterPID = new PIDData(0.005, 0.00001, 0.0000
         );
     }
 }

@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Constants;
 
-@TeleOp(name = "localized drive")
+@TeleOp(name = "localized drive", group = "test")
 public class LocalizedDrive extends CommandOpMode {
     private Robot bot;
 

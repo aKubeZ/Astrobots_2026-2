@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Constants;
 
-@TeleOp(name = "drivetrain test")
+@TeleOp(name = "drivetrain test", group = "test")
 public class DrivetrainTest extends CommandOpMode {
     private Robot bot;
 

@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.autonomous.Localizer;
 import org.firstinspires.ftc.teamcode.autonomous.Pose;
 import org.firstinspires.ftc.teamcode.commands.DataLog;
 
+import org.firstinspires.ftc.teamcode.pid.PIDData;
 import org.firstinspires.ftc.teamcode.subsystems.*;
 import org.firstinspires.ftc.teamcode.commands.*;
 
@@ -114,6 +115,12 @@ public class BotContainer {
                 // If you hold your controller rotated 45 degrees counterclockwise it's easy
                 // X Y A B will correspond to positive rotation of the FL FR BL BR motors
                 // UP RIGHT LEFT DOWN will correspond to the negative rotation of the FL FR BL BR motors
+            } break;
+            case ENCODER_DRIVE: {
+                Constants.logger.addEntry("fl", () -> drivetrain.getDriveState().flEncoding);
+                Constants.logger.addEntry("fr", () -> drivetrain.getDriveState().frEncoding);
+                Constants.logger.addEntry("bl", () -> drivetrain.getDriveState().blEncoding);
+                Constants.logger.addEntry("br", () -> drivetrain.getDriveState().brEncoding);
             } break;
             case CUSTOM: {
 

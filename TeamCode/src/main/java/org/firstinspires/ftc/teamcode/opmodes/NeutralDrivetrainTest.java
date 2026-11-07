@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Constants;
 
-@TeleOp(name = "neutral drivetrain test")
+@TeleOp(name = "neutral drivetrain test", group = "test")
 public class NeutralDrivetrainTest extends CommandOpMode {
     private Robot bot;
 
