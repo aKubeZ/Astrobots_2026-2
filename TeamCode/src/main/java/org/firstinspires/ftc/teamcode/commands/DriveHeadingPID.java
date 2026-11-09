@@ -23,6 +23,7 @@ public class DriveHeadingPID extends CommandBase {
     private final DoubleSupplier cosSupplier;
     private final PIDController headingPID = new PIDController(Constants.AutoConstants.headingPID, true);
     private double previousTimestamp = -1;
+    private double desiredHeading = 0;
 
     /**
      * Create a stick drive command.
@@ -59,9 +60,9 @@ public class DriveHeadingPID extends CommandBase {
         // if both suppliers are null do nothing
         double desiredCos = cosSupplier.getAsDouble();
         double desiredSin = sinSupplier.getAsDouble();
-        double desiredHeading = (desiredCos == 0 && desiredSin == 0)
-                ? currentHeading
-                : Math.atan2(desiredSin, desiredCos);
+
+        if (desiredCos != 0 || desiredSin != 0)
+            desiredHeading = Math.atan2(desiredSin, desiredCos);
 
         double driveRot = -headingPID.update(
                 desiredHeading,
