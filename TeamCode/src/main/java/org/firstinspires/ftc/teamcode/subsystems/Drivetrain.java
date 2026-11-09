@@ -54,7 +54,6 @@ public class Drivetrain extends SubsystemBase {
     private final DcMotorEx motorFR;
     private final DcMotorEx motorBL;
     private final DcMotorEx motorBR;
-    private double headingOrigin = 0;
     private final boolean disabled = !Constants.SubsystemToggle.drivetrain;
 
     private Drivetrain() {
@@ -86,19 +85,6 @@ public class Drivetrain extends SubsystemBase {
     }
 
     /**
-     * Sets the heading origin of the robot, to make a reference
-     * to base the field-centric drive on.
-     * @param heading the initial heading
-     */
-    public void setHeadingOrigin(double heading) { headingOrigin = heading; }
-
-    /**
-     * Returns the heading origin of the robot for a reference.
-     * @return the heading origin
-     */
-    public double getHeadingOrigin() { return headingOrigin; }
-
-    /**
      * Drives the robot using robot centric.
      * @param x positive moves it right, negative moves it left
      * @param y positive moves it forwards, negative moves it backwards
@@ -126,7 +112,7 @@ public class Drivetrain extends SubsystemBase {
             [ cos   -sin ] [ x ] = [ x cos - y sin ]
             [ sin    cos ] [ y ] = [ x sin + y cos ]
          */
-        double angle = -(heading - headingOrigin); // flipped bc clockwise
+        double angle = -heading; // flipped bc clockwise
         double sin = Math.sin(angle);
         double cos = Math.cos(angle);
         double robotX = x * cos - y * sin;
@@ -140,7 +126,7 @@ public class Drivetrain extends SubsystemBase {
      * @param x positive moves it right, negative moves it left
      * @param y positive moves it forwards, negative moves it backwards
      * @param rot positive spins it clockwise, negative spins it counter-clockwise
-     * @param heading the absolute heading; origin is set by headingOrigin
+     * @param heading the where the robot thinks it's heading
      */
     public void driveFieldAuto(double x, double y, double rot, double heading) {
         if (disabled) return;

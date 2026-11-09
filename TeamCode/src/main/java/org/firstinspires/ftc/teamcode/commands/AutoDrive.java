@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.commands;
 import com.arcrobotics.ftclib.command.CommandBase;
 
 import org.firstinspires.ftc.teamcode.BotContainer;
+import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.autonomous.Localizer;
 import org.firstinspires.ftc.teamcode.autonomous.Path;
 import org.firstinspires.ftc.teamcode.autonomous.PathTracer;
@@ -35,7 +36,7 @@ public class AutoDrive extends CommandBase {
     @Override
     public void initialize() {
         Pose startPose = path.at(0);
-        drivetrain.setHeadingOrigin(-startPose.heading + gyroscope.getHeading());
+        gyroscope.setCurrentHeading(startPose.heading);
         localizer.resetPose(startPose);
         previousTimestamp = BotContainer.timestamp();
     }
@@ -55,5 +56,11 @@ public class AutoDrive extends CommandBase {
     }
 
     @Override
-    public void end(boolean interrupted) { initialized = false; }
+    public void end(boolean interrupted) {
+        // so apparently end() in a command op mode doesnt work
+        // so im moving ts to execute
+        // kill me
+//        Constants.AutoConstants.autoEndHeading = gyroscope.getHeading();
+        initialized = false;
+    }
 }

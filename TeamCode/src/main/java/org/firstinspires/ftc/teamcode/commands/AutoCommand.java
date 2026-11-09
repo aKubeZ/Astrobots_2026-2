@@ -9,6 +9,7 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.BotContainer;
 import org.firstinspires.ftc.teamcode.Constants;
+import org.firstinspires.ftc.teamcode.autonomous.Path;
 import org.firstinspires.ftc.teamcode.autonomous.PathBuilder;
 import org.firstinspires.ftc.teamcode.autonomous.Pose;
 
@@ -27,29 +28,43 @@ public class AutoCommand extends ParallelCommandGroup {
         this.alliance = alliance;
         addCommands(new InstantCommand(() -> initialTimestamp = BotContainer.timestamp()));
 
-        addCommands(new AutoDrive(new PathBuilder(10, 10, 1)
-                .moveTo(-20, 20, -1, 3)
-                .build()
-        ));
+//        double pi = Math.PI;
+//        addCommands(new AutoDrive(t -> {
+//            if (t < 10) {
+//                return new Pose(
+//                        54, 0, pi
+//                );
+//            } else if (t < 15) {
+//                double progress = (t - 10) / 5;
+//                return new Pose(
+//                        54, 110 * progress, pi
+//                );
+//            } else if (t < 18) {
+//                double progress = (t - 15) / 3;
+//                return new Pose(
+//                        54 - 54 * progress, 110, pi
+//                );
+//            } else return new Pose(-20, 110, pi);
+//        }));
+//        addCommands(new AutoDrive(t -> {
+//            return new Pose(0, 10 * t, 0);
+//        }));
+        addCommands(new AutoDrive(t -> {
+            return new Pose(0, 0, t / 5 + 1);
+        }));
 
-//        addCommands(new AutoDrive(new PathBuilder(0, 0, 0)
-//                .stall(20)
-//                .moveTo(0, -12, 0, 1)
-//                .moveTo(60, -120, 0, 7)
-//                .build()
-//        ));
-//
-//        addCommands(
-//                new ShootPID(() -> {
-//                    double t = BotContainer.timestamp() - initialTimestamp;
-//                    if (t < 20) return Constants.shooterRPM;
-//                    else return 0;
-//                }),
-//                new RunIndexer(() -> {
-//                    double t = BotContainer.timestamp() - initialTimestamp;
-//                    if (t < 6.7) return 0;
-//                    else return Constants.indexerPower;
-//                })
-//        );
+        addCommands(
+                new ShootPID(() -> {
+                    double t = BotContainer.timestamp() - initialTimestamp;
+                    if (t < 10) return Constants.shooterRPM;
+                    else return 0;
+                }),
+                new RunIndexer(() -> {
+                    double t = BotContainer.timestamp() - initialTimestamp;
+                    if (t < 3) return 0;
+                    else if (t < 10) return Constants.indexerPower;
+                    else return 0;
+                })
+        );
     }
 }

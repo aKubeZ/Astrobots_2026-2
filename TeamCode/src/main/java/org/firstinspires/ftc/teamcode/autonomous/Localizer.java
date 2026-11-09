@@ -42,9 +42,6 @@ public class Localizer {
     private boolean initialized = false;
     private boolean initializedAgain = false;
 
-    // constant -'ed to the heading
-    private double headingOrigin = 0;
-
     private Pose pose = new Pose(0, 0, 0);
 
     private Localizer() { }
@@ -55,7 +52,6 @@ public class Localizer {
      */
     public void update(double deltaT) {
         if (deltaT == 0) return;
-        // TODO: test this bc all of this only hypothetically works
         Drivetrain.DriveState driveState = drivetrain.getDriveState();
         if (!initialized) {
             previousFLEncoding = driveState.flEncoding;
@@ -129,7 +125,7 @@ public class Localizer {
             [ cos   -sin ] [ x ] = [ x cos - y sin ]
             [ sin    cos ] [ y ] = [ x sin + y cos ]
          */
-        double heading = gyroscope.getHeading() - drivetrain.getHeadingOrigin();
+        double heading = gyroscope.getHeading();
         double cos = Math.cos(heading);
         double sin = Math.sin(heading);
         double dX = dXRelative * cos - dYRelative * sin;

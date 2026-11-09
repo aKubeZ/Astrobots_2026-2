@@ -77,6 +77,12 @@ public class BotContainer {
                 Constants.logger.addEntry("h", () -> localizer.getPose().heading);
             } // overflow!
             case TELE: {
+                // set drivetrain stuff for teleop
+                gyroscope.setCurrentHeading(
+                        - Constants.AutoConstants.teleStartHeading
+                        + gyroscope.getHeading()
+                );
+
                 drivetrain.setDefaultCommand(new Drive(true,
                         () -> (1 - .75 * pilot.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER))
                                 * pilot.getLeftX(),
@@ -86,7 +92,10 @@ public class BotContainer {
                                 * pilot.getRightX() // multiplier based on right trigger :3
                 ));
                 intake.setDefaultCommand(new RunIntake(
-                        () -> Constants.intakePower * copilot.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)
+                        () -> Constants.intakePower * (
+                                copilot.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)
+                                - copilot.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER)
+                        )
                 ));
                 shooter.setDefaultCommand(new ShootPID(
                         () -> copilot.getGamepadButton(GamepadKeys.Button.A).get()
@@ -145,14 +154,14 @@ public class BotContainer {
                         .whenReleased(intakeServos::outtake); // intake servos
 
                 pilot.getGamepadButton(GamepadKeys.Button.B).whenActive(
-                        () -> drivetrain.setHeadingOrigin(gyroscope.getHeading())
+                        () -> gyroscope.setCurrentHeading(0)
                 ); // reset gyro
             }
             break;
             case LOCALIZATION_TEST: // overflow!
             case LOCALIZED_DRIVE: {
                 pilot.getGamepadButton(GamepadKeys.Button.B).whenActive(
-                        () -> drivetrain.setHeadingOrigin(gyroscope.getHeading())
+                        () -> gyroscope.setCurrentHeading(0)
                 );
 
                 pilot.getGamepadButton(GamepadKeys.Button.A).whenActive(

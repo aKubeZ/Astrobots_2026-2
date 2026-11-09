@@ -23,11 +23,30 @@ public class Gyroscope {
     }
 
     private final IMU gyro;
+    private double headingOrigin = 0;
     private Gyroscope() { gyro = Constants.hardwareMap.get(IMU.class, "imu"); }
 
     /**
-     * Returns the heading of the gyroscope.
+     * Sets the heading origin to be such that getHeading()
+     * currently returns the given heading.
+     */
+    public void setCurrentHeading(double heading) {
+        headingOrigin = getRawHeading() - heading;
+    }
+
+    /**
+     * Returns the heading of the gyroscope, offset with the set value.
      * @return gyroscope heading
      */
-    public double getHeading() { return gyro.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS); }
+    public double getHeading() {
+        return getRawHeading() - headingOrigin;
+    }
+
+    /**
+     * Returns the reading of the gyroscope.
+     * @return gyroscope heading
+     */
+    public double getRawHeading() {
+        return gyro.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+    }
 }
