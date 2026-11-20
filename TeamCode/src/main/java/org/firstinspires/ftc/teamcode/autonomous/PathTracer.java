@@ -4,7 +4,7 @@ import org.firstinspires.ftc.teamcode.BotContainer;
 import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.pid.PIDController;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
-import org.firstinspires.ftc.teamcode.subsystems.Gyroscope;
+import org.firstinspires.ftc.teamcode.miscellaneous.Gyroscope;
 
 import java.util.function.Supplier;
 
@@ -12,14 +12,13 @@ import java.util.function.Supplier;
  * Command that attempts to make the robot trace a path using PID.
  */
 public class PathTracer {
-    private final Drivetrain drivetrain = Drivetrain.getInstance();
-    private final Gyroscope gyroscope = Gyroscope.getInstance();
+    private final Drivetrain drivetrain = org.firstinspires.ftc.teamcode.subsystems.Drivetrain.getInstance();
     private final Path path;
     private final Supplier<Pose> localizer;
 
-    private final PIDController xPID = new PIDController(Constants.AutoConstants.xyPID, false);
-    private final PIDController yPID = new PIDController(Constants.AutoConstants.xyPID, false);
-    private final PIDController headingPID = new PIDController(Constants.AutoConstants.headingPID, true);
+    private final PIDController xPID = new PIDController(Constants.Drive.xyPID, false);
+    private final PIDController yPID = new PIDController(Constants.Drive.xyPID, false);
+    private final PIDController headingPID = new PIDController(Constants.Drive.headingPID, true);
 
     private double timeOffset;
     private double previousTimestamp;
@@ -53,7 +52,7 @@ public class PathTracer {
         double driveY = yPID.update(desiredPose.y, localizer.get().y, deltaT);
 
         // negative rot because positive should be ccw.
-        double driveRot = -headingPID.update(desiredPose.heading, localizer.get().heading, deltaT);
+        double driveRot = headingPID.update(desiredPose.heading, localizer.get().heading, deltaT);
         drivetrain.driveFieldAuto(driveX, driveY, driveRot, localizer.get().heading);
 
         // update previous timestamp

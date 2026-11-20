@@ -18,7 +18,7 @@ public class LocalizationTest extends CommandOpMode {
         Constants.telemetry = telemetry;
         Constants.pilot = new GamepadEx(gamepad1);
         Constants.copilot = new GamepadEx(gamepad2);
-        Constants.AutoConstants.neutralDrivetrain = true;
+        Constants.Drive.neutralDrivetrain = true;
 
         bot = new Bot(Bot.OpMode.AUTO, Bot.Alliance.BLUE, Bot.Config.LOCALIZATION_TEST);
     }

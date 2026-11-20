@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
@@ -19,7 +18,7 @@ public class Indexer extends SubsystemBase {
     }
 
     private final DcMotorEx motor;
-    private final boolean disabled = !Constants.SubsystemToggle.indexer;
+    private final boolean disabled = !Constants.Subsystems.indexer;
     private Indexer() {
         motor = disabled ? null : Constants.hardwareMap.get(DcMotorEx.class, "ix");
         if (disabled) return;

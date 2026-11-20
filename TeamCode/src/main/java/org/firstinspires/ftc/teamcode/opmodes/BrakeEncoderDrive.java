@@ -18,7 +18,7 @@ public class BrakeEncoderDrive extends CommandOpMode {
         Constants.telemetry = telemetry;
         Constants.pilot = new GamepadEx(gamepad1);
         Constants.copilot = new GamepadEx(gamepad2);
-        Constants.AutoConstants.neutralDrivetrain = false;
+        Constants.Drive.neutralDrivetrain = false;
 
         bot = new Bot(Bot.OpMode.TELEOP, Bot.Alliance.BLUE, Bot.Config.ENCODER_DRIVE);
     }

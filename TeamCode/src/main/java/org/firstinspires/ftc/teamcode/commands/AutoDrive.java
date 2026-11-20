@@ -3,13 +3,12 @@ package org.firstinspires.ftc.teamcode.commands;
 import com.arcrobotics.ftclib.command.CommandBase;
 
 import org.firstinspires.ftc.teamcode.BotContainer;
-import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.autonomous.Localizer;
 import org.firstinspires.ftc.teamcode.autonomous.Path;
 import org.firstinspires.ftc.teamcode.autonomous.PathTracer;
 import org.firstinspires.ftc.teamcode.autonomous.Pose;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
-import org.firstinspires.ftc.teamcode.subsystems.Gyroscope;
+import org.firstinspires.ftc.teamcode.miscellaneous.Gyroscope;
 
 /**
  * A command implementation of PathTracer.

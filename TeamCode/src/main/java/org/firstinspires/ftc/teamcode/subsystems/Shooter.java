@@ -17,7 +17,7 @@ public class Shooter extends SubsystemBase {
     }
 
     private final DcMotorEx motor;
-    private final boolean disabled = !Constants.SubsystemToggle.shooter;
+    private final boolean disabled = !Constants.Subsystems.shooter;
     private Shooter() {
         motor = disabled ? null : Constants.hardwareMap.get(DcMotorEx.class, "sh");
         if (disabled) return;

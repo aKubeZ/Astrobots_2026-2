@@ -6,7 +6,7 @@ import org.firstinspires.ftc.teamcode.BotContainer;
 import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.pid.PIDController;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
-import org.firstinspires.ftc.teamcode.subsystems.Gyroscope;
+import org.firstinspires.ftc.teamcode.miscellaneous.Gyroscope;
 
 import java.util.function.DoubleSupplier;
 
@@ -15,13 +15,13 @@ import java.util.function.DoubleSupplier;
  * as inputs.
  */
 public class DriveHeadingPID extends CommandBase {
-    private final Drivetrain drivetrain = Drivetrain.getInstance();
+    private final Drivetrain drivetrain = org.firstinspires.ftc.teamcode.subsystems.Drivetrain.getInstance();
     private final Gyroscope gyroscope = Gyroscope.getInstance();
     private final DoubleSupplier xSupplier;
     private final DoubleSupplier ySupplier;
     private final DoubleSupplier sinSupplier;
     private final DoubleSupplier cosSupplier;
-    private final PIDController headingPID = new PIDController(Constants.AutoConstants.headingPID, true);
+    private final PIDController headingPID = new PIDController(Constants.Drive.headingPID, true);
     private double previousTimestamp = -1;
     private double desiredHeading = 0;
 
@@ -64,7 +64,7 @@ public class DriveHeadingPID extends CommandBase {
         if (desiredCos != 0 || desiredSin != 0)
             desiredHeading = Math.atan2(desiredSin, desiredCos);
 
-        double driveRot = -headingPID.update(
+        double driveRot = headingPID.update(
                 desiredHeading,
                 currentHeading,
                 deltaT

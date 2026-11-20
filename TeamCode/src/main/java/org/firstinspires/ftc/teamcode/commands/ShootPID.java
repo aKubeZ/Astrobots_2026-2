@@ -13,7 +13,7 @@ public class ShootPID extends CommandBase {
     private final Shooter shooter = Shooter.getInstance();
     private final DoubleSupplier rpmSupplier;
     private final PIDController pidController
-            = new PIDController(Constants.AutoConstants.shooterPID, false);
+            = new PIDController(Constants.shooterPID, false);
     private double previousTimestamp = -1;
 
     public ShootPID(DoubleSupplier rpmSupplier) {

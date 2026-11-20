@@ -8,9 +8,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.autonomous.Localizer;
 import org.firstinspires.ftc.teamcode.autonomous.Pose;
-import org.firstinspires.ftc.teamcode.commands.DataLog;
+import org.firstinspires.ftc.teamcode.miscellaneous.Logger;
 
-import org.firstinspires.ftc.teamcode.pid.PIDData;
+import org.firstinspires.ftc.teamcode.miscellaneous.Gyroscope;
 import org.firstinspires.ftc.teamcode.subsystems.*;
 import org.firstinspires.ftc.teamcode.commands.*;
 
@@ -28,23 +28,23 @@ public class BotContainer {
     private final GamepadEx copilot = Constants.copilot;
 
     // subsystems
-    private final Drivetrain drivetrain = Drivetrain.getInstance();
-    private final Gyroscope gyroscope = Gyroscope.getInstance();
+    private final Drivetrain drivetrain = org.firstinspires.ftc.teamcode.subsystems.Drivetrain.getInstance();
     private final Shooter shooter = Shooter.getInstance();
     private final Intake intake = Intake.getInstance();
     private final IntakeServos intakeServos = IntakeServos.getInstance();
     private final Indexer indexer = Indexer.getInstance();
-    private Localizer localizer;
+    private final Gyroscope gyroscope = Gyroscope.getInstance();
 
     // others
     private final Bot.Alliance alliance;
     private final Bot.Config config;
+    private Localizer localizer;
+    private final Logger logger = Logger.getInstance();
 
     public BotContainer(Bot.Alliance alliance, Bot.Config config) {
         this.alliance = alliance;
         this.config = config;
-        Constants.logger = new DataLog();
-        Constants.logger.schedule();
+        logger.schedule();
         setDefaultCommands();
         configBindings();
     }
@@ -56,30 +56,30 @@ public class BotContainer {
      * when no other command is running.
      */
     private void setDefaultCommands() {
-        Constants.logger.addEntry("elapsed time", BotContainer::timestamp);
+        logger.addEntry("elapsed time", BotContainer::timestamp);
         drivetrain.resetZeroPowerBehavior();
 
         switch (config) {
             case AUTO: {
-                localizer = Localizer.getInstance();
-                Constants.logger.addEntry("x", () -> localizer.getPose().x);
-                Constants.logger.addEntry("y", () -> localizer.getPose().y);
-                Constants.logger.addEntry("h", () -> localizer.getPose().heading);
+                localizer = org.firstinspires.ftc.teamcode.autonomous.Localizer.getInstance();
+                logger.addEntry("x", () -> localizer.getPose().x);
+                logger.addEntry("y", () -> localizer.getPose().y);
+                logger.addEntry("h", () -> localizer.getPose().heading);
             } break;
             case LOCALIZED_DRIVE: {
-                Localizer.getInstance(); // create localizer instance first (if not made already)
+                org.firstinspires.ftc.teamcode.autonomous.Localizer.getInstance(); // create localizer instance first (if not made already)
                 new TestLocalizer().schedule(); // actually yk localize
             } // overflow!
             case LOCALIZATION_TEST: {
-                localizer = Localizer.getInstance();
-                Constants.logger.addEntry("x", () -> localizer.getPose().x);
-                Constants.logger.addEntry("y", () -> localizer.getPose().y);
-                Constants.logger.addEntry("h", () -> localizer.getPose().heading);
+                localizer = org.firstinspires.ftc.teamcode.autonomous.Localizer.getInstance();
+                logger.addEntry("x", () -> localizer.getPose().x);
+                logger.addEntry("y", () -> localizer.getPose().y);
+                logger.addEntry("h", () -> localizer.getPose().heading);
             } // overflow!
             case TELE: {
                 // set drivetrain stuff for teleop
                 gyroscope.setCurrentHeading(
-                        - Constants.AutoConstants.teleStartHeading
+                        - Constants.Drive.teleStartHeading
                         + gyroscope.getHeading()
                 );
 
@@ -88,8 +88,10 @@ public class BotContainer {
                                 * pilot.getLeftX(),
                         () -> (1 - .75 * pilot.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER))
                                 * pilot.getLeftY(),
+//                        () -> pilot.getRightX(), // multiplier based on right trigger :3
+//                        () -> pilot.getRightY() // multiplier based on right trigger :3
                         () -> (1 - .75 * pilot.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER))
-                                * pilot.getRightX() // multiplier based on right trigger :3
+                                * pilot.getRightX()
                 ));
                 intake.setDefaultCommand(new RunIntake(
                         () -> Constants.intakePower * (
@@ -102,7 +104,7 @@ public class BotContainer {
                                 ? -Constants.shooterRPM / 4
                                 : shooterOn ? Constants.shooterRPM : 0
                 ));
-                Constants.logger.addEntry("shooter rpm", shooter::getRPM);
+                logger.addEntry("shooter rpm", shooter::getRPM);
                 indexer.setDefaultCommand(new RunIndexer(
                         () -> Constants.indexerPower * (
                                 (copilot.getGamepadButton(GamepadKeys.Button.X).get() ? 1 : 0)
@@ -126,10 +128,10 @@ public class BotContainer {
                 // UP RIGHT LEFT DOWN will correspond to the negative rotation of the FL FR BL BR motors
             } break;
             case ENCODER_DRIVE: {
-                Constants.logger.addEntry("fl", () -> drivetrain.getDriveState().flEncoding);
-                Constants.logger.addEntry("fr", () -> drivetrain.getDriveState().frEncoding);
-                Constants.logger.addEntry("bl", () -> drivetrain.getDriveState().blEncoding);
-                Constants.logger.addEntry("br", () -> drivetrain.getDriveState().brEncoding);
+                logger.addEntry("fl", () -> drivetrain.getDriveState().flEncoding);
+                logger.addEntry("fr", () -> drivetrain.getDriveState().frEncoding);
+                logger.addEntry("bl", () -> drivetrain.getDriveState().blEncoding);
+                logger.addEntry("br", () -> drivetrain.getDriveState().brEncoding);
             } break;
             case CUSTOM: {
 

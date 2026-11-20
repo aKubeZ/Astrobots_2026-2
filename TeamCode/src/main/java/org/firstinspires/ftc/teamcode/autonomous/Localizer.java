@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.autonomous;
 
 import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
-import org.firstinspires.ftc.teamcode.subsystems.Gyroscope;
+import org.firstinspires.ftc.teamcode.miscellaneous.Gyroscope;
 
 /**
  * An attempt to make localization possible with the robot
@@ -26,7 +26,7 @@ public class Localizer {
         return (accel < 600) ? 1 : (accel < 1000) ? 0.5 : 0;
     }
 
-    private final Drivetrain drivetrain = Drivetrain.getInstance();
+    private final Drivetrain drivetrain = org.firstinspires.ftc.teamcode.subsystems.Drivetrain.getInstance();
     private final Gyroscope gyroscope = Gyroscope.getInstance();
     private double previousFLEncoding = 0; // to calculate speed
     private double previousFREncoding = 0;
@@ -64,20 +64,20 @@ public class Localizer {
 
         // these doubles probably will be in inches per second
         double rawFLSpeed = ((driveState.flPower == 0)
-                ? Constants.AutoConstants.deadInchesPerTickFL
-                : Constants.AutoConstants.freeInchesPerTickFL)
+                ? Constants.Localizer.deadInchesPerTickFL
+                : Constants.Localizer.freeInchesPerTickFL)
                 * (driveState.flEncoding - previousFLEncoding) / deltaT;
         double rawFRSpeed = ((driveState.frPower == 0)
-                ? Constants.AutoConstants.deadInchesPerTickFR
-                : Constants.AutoConstants.freeInchesPerTickFR)
+                ? Constants.Localizer.deadInchesPerTickFR
+                : Constants.Localizer.freeInchesPerTickFR)
                 * (driveState.frEncoding - previousFREncoding) / deltaT;
         double rawBLSpeed = ((driveState.blPower == 0)
-                ? Constants.AutoConstants.deadInchesPerTickBL
-                : Constants.AutoConstants.freeInchesPerTickBL)
+                ? Constants.Localizer.deadInchesPerTickBL
+                : Constants.Localizer.freeInchesPerTickBL)
                 * (driveState.blEncoding - previousBLEncoding) / deltaT;
         double rawBRSpeed = ((driveState.brPower == 0)
-                ? Constants.AutoConstants.deadInchesPerTickBR
-                : Constants.AutoConstants.freeInchesPerTickBR)
+                ? Constants.Localizer.deadInchesPerTickBR
+                : Constants.Localizer.freeInchesPerTickBR)
                 * (driveState.brEncoding - previousBREncoding) / deltaT;
 
         double flSpeed;
@@ -115,11 +115,19 @@ public class Localizer {
             [ br ]   [  1   1  -1 ] [ t ]
          */
         double dXRelative = slipMultiplierX(netWheelAccel) *
-                Constants.AutoConstants.localizeXScale
-                * (flSpeed + frSpeed - blSpeed + brSpeed) / 4;
+                Constants.Localizer.localizeXScale * (
+                        Constants.Drive.Coeffs.flX * flSpeed
+                        + Constants.Drive.Coeffs.frX * frSpeed
+                        + Constants.Drive.Coeffs.blX * blSpeed
+                        + Constants.Drive.Coeffs.brX * brSpeed
+                ) / 4;
         double dYRelative = slipMultiplierY(netWheelAccel) *
-                Constants.AutoConstants.localizeYScale
-                * (flSpeed - frSpeed + blSpeed + brSpeed) / 4;
+                Constants.Localizer.localizeYScale * (
+                        Constants.Drive.Coeffs.flY * flSpeed
+                        + Constants.Drive.Coeffs.frY * frSpeed
+                        + Constants.Drive.Coeffs.blY * blSpeed
+                        + Constants.Drive.Coeffs.brY * brSpeed
+                ) / 4;
 
         /* Rotate based on heading
             [ cos   -sin ] [ x ] = [ x cos - y sin ]

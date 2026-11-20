@@ -18,7 +18,7 @@ public class NeutralDrivetrainTest extends CommandOpMode {
         Constants.telemetry = telemetry;
         Constants.pilot = new GamepadEx(gamepad1);
         Constants.copilot = new GamepadEx(gamepad2);
-        Constants.AutoConstants.neutralDrivetrain = true;
+        Constants.Drive.neutralDrivetrain = true;
 
         bot = new Bot(Bot.OpMode.NONE, Bot.Alliance.BLUE, Bot.Config.DRIVETRAIN_TEST);
     }

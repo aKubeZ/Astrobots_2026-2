@@ -17,7 +17,7 @@ public class Intake extends SubsystemBase {
     }
 
     private final DcMotorEx motor;
-    private final boolean disabled = !Constants.SubsystemToggle.intake;
+    private final boolean disabled = !Constants.Subsystems.intake;
     private Intake() {
         motor = disabled ? null : Constants.hardwareMap.get(DcMotorEx.class, "in");
         if (disabled) return;

@@ -54,7 +54,7 @@ public class Drivetrain extends SubsystemBase {
     private final DcMotorEx motorFR;
     private final DcMotorEx motorBL;
     private final DcMotorEx motorBR;
-    private final boolean disabled = !Constants.SubsystemToggle.drivetrain;
+    private final boolean disabled = !Constants.Subsystems.drivetrain;
 
     private Drivetrain() {
         motorFL = disabled ? null : Constants.hardwareMap.get(DcMotorEx.class, "fl");
@@ -71,7 +71,7 @@ public class Drivetrain extends SubsystemBase {
      */
     public void resetZeroPowerBehavior() {
         if (disabled) return;
-        if (Constants.AutoConstants.neutralDrivetrain) {
+        if (Constants.Drive.neutralDrivetrain) {
             motorFL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
             motorFR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
             motorBL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -88,22 +88,38 @@ public class Drivetrain extends SubsystemBase {
      * Drives the robot using robot centric.
      * @param x positive moves it right, negative moves it left
      * @param y positive moves it forwards, negative moves it backwards
-     * @param rot positive spins it clockwise, negative spins it counter-clockwise
+     * @param rot positive spins it counter-clockwise, negative spins it clockwise
      */
     public void driveRobotCentric(double x, double y, double rot) {
         if (disabled) return;
         double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rot), 1);
-        motorFL.setPower((y + x + rot) / denominator);
-        motorFR.setPower((-y + x + rot) / denominator);
-        motorBL.setPower((y - x + rot) / denominator);
-        motorBR.setPower((y + x - rot) / denominator);
+        motorFL.setPower((
+                Constants.Drive.Coeffs.flY * y
+                + Constants.Drive.Coeffs.flX * x
+                + Constants.Drive.Coeffs.flRot * rot
+        ) / denominator);
+        motorFR.setPower((
+                Constants.Drive.Coeffs.frY * y
+                        + Constants.Drive.Coeffs.frX * x
+                        + Constants.Drive.Coeffs.frRot * rot
+        ) / denominator);
+        motorBL.setPower((
+                Constants.Drive.Coeffs.blY * y
+                        + Constants.Drive.Coeffs.blX * x
+                        + Constants.Drive.Coeffs.blRot * rot
+        ) / denominator);
+        motorBR.setPower((
+                Constants.Drive.Coeffs.brY * y
+                        + Constants.Drive.Coeffs.brX * x
+                        + Constants.Drive.Coeffs.brRot * rot
+        ) / denominator);
     }
 
      /**
      * Drives the robot using field centric
      * @param x positive moves it right, negative moves it left
      * @param y positive moves it forwards, negative moves it backwards
-     * @param rot positive spins it clockwise, negative spins it counter-clockwise
+     * @param rot positive spins it counter-clockwise, negative spins it clockwise
      * @param heading the absolute heading; origin is set by headingOrigin
      */
     public void driveFieldCentric(double x, double y, double rot, double heading) {
@@ -112,9 +128,8 @@ public class Drivetrain extends SubsystemBase {
             [ cos   -sin ] [ x ] = [ x cos - y sin ]
             [ sin    cos ] [ y ] = [ x sin + y cos ]
          */
-        double angle = -heading; // flipped bc clockwise
-        double sin = Math.sin(angle);
-        double cos = Math.cos(angle);
+        double sin = Math.sin(heading);
+        double cos = Math.cos(heading);
         double robotX = x * cos - y * sin;
         double robotY = x * sin + y * cos;
         driveRobotCentric(robotX, robotY, rot);
@@ -125,12 +140,12 @@ public class Drivetrain extends SubsystemBase {
      * and the field centric is relative to the gyroscope zero.
      * @param x positive moves it right, negative moves it left
      * @param y positive moves it forwards, negative moves it backwards
-     * @param rot positive spins it clockwise, negative spins it counter-clockwise
+     * @param rot positive spins it counter-clockwise, negative spins it clockwise
      * @param heading the where the robot thinks it's heading
      */
     public void driveFieldAuto(double x, double y, double rot, double heading) {
         if (disabled) return;
-        double bound = Constants.AutoConstants.driveMax;
+        double bound = Constants.Drive.driveMax;
         double boundedX = Math.max(Math.min(x, bound), -bound);
         double boundedY = Math.max(Math.min(y, bound), -bound);
         double boundedRot = Math.max(Math.min(rot, bound), -bound);

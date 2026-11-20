@@ -1,13 +1,12 @@
-package org.firstinspires.ftc.teamcode.subsystems;
+package org.firstinspires.ftc.teamcode.miscellaneous;
 
-import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Constants;
 
 /**
- * Gyroscope (not really a subsystem but).
+ * Gyroscope.
  */
 public class Gyroscope {
     private static Gyroscope instance = null;

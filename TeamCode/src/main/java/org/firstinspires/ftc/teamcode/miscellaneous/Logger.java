@@ -1,19 +1,23 @@
-package org.firstinspires.ftc.teamcode.commands;
+package org.firstinspires.ftc.teamcode.miscellaneous;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Constants;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
 /**
  * Command that constantly logs and updates data in the telemetry
  */
-public class DataLog extends CommandBase {
+public class Logger extends CommandBase {
+    private static Logger instance = null;
+    public static synchronized Logger getInstance() {
+        if (instance == null) instance = new Logger();
+        return instance;
+    }
+
     /**
      * An entry in the log
      */
@@ -53,7 +57,7 @@ public class DataLog extends CommandBase {
     /**
      * Create a data logger
      */
-    public DataLog() {
+    public Logger() {
         this.entries = new ArrayList<>();
     }
 
@@ -101,5 +105,12 @@ public class DataLog extends CommandBase {
      */
     public void removeEntry(String name) {
         entries.removeIf((entry) -> entry.getName().equals(name));
+    }
+
+    /**
+     * Removes all entries.
+     */
+    public void clearEntries() {
+        entries.clear();
     }
 }
