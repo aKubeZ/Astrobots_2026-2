@@ -51,7 +51,7 @@ public class PIDController {
         double derivative = (error - previousError) / deltaT;
         integral += error * deltaT;
 
-        previousError = output;
+        previousError = error;
         return kP * error + kI * integral + kD * derivative;
     }
 

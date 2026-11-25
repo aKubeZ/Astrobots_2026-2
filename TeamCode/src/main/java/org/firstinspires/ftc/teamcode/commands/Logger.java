@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.miscellaneous;
+package org.firstinspires.ftc.teamcode.commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 
@@ -12,12 +12,6 @@ import java.util.function.Supplier;
  * Command that constantly logs and updates data in the telemetry
  */
 public class Logger extends CommandBase {
-    private static Logger instance = null;
-    public static synchronized Logger getInstance() {
-        if (instance == null) instance = new Logger();
-        return instance;
-    }
-
     /**
      * An entry in the log
      */
@@ -103,7 +97,7 @@ public class Logger extends CommandBase {
      * @param supplier the supplier of the double to the entry.
      */
     public void addEntry(String name, DoubleSupplier supplier) {
-        entries.add(new Entry(name, () -> Double.toString(supplier.getAsDouble())));
+        entries.add(new Entry(name, () -> String.format("%s", supplier.getAsDouble())));
     }
 
     /**
@@ -112,14 +106,5 @@ public class Logger extends CommandBase {
      */
     public void removeEntry(String name) {
         entries.removeIf((entry) -> entry.getName().equals(name));
-    }
-
-    /**
-     * Removes all entries.
-     */
-    public void clearEntries() {
-        // entries.clear doesnt work???
-        addEntry("im tryna remove ok", () -> 0);
-        entries = new ArrayList<>();
     }
 }

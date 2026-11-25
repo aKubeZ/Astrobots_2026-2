@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode;
 import com.arcrobotics.ftclib.command.Robot;
 import com.arcrobotics.ftclib.command.Command;
 
+import org.firstinspires.ftc.teamcode.commands.Logger;
+
 public class Bot extends Robot {
     public Command autoCommand = null;
     public final BotContainer container;
@@ -23,11 +25,12 @@ public class Bot extends Robot {
         LOCALIZATION_TEST,
         LOCALIZED_DRIVE,
         ENCODER_DRIVE,
-        CUSTOM,
+        CUSTOM, SPIN,
     }
 
     public Bot(OpMode opMode, Alliance alliance, Config config) {
         this.opMode = opMode;
+        Constants.logger = new Logger(); // make a new logger
         container = new BotContainer(alliance, config);
 
         switch (opMode) {

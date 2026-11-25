@@ -46,6 +46,10 @@ public class Gyroscope {
      * @return gyroscope heading
      */
     public double getRawHeading() {
-        return gyro.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS) - Constants.gyroscopeOffset;
+        return Constants.boundCyclic(
+                gyro.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS)
+                        - Constants.gyroscopeOffset,
+                -Math.PI
+        );
     }
 }

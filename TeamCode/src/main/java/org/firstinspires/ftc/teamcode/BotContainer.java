@@ -8,8 +8,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.autonomous.Localizer;
 import org.firstinspires.ftc.teamcode.autonomous.Pose;
-import org.firstinspires.ftc.teamcode.miscellaneous.Logger;
+import org.firstinspires.ftc.teamcode.commands.Logger;
 
+import org.firstinspires.ftc.teamcode.miscellaneous.DriveHPControls;
 import org.firstinspires.ftc.teamcode.miscellaneous.Gyroscope;
 import org.firstinspires.ftc.teamcode.subsystems.*;
 import org.firstinspires.ftc.teamcode.commands.*;
@@ -26,12 +27,13 @@ public class BotContainer {
     // controllers
     private final GamepadEx pilot = Constants.pilot;
     private final GamepadEx copilot = Constants.copilot;
+    private final Logger logger = Constants.logger;
+
 
     // subsystems
-    private final Drivetrain drivetrain = org.firstinspires.ftc.teamcode.subsystems.Drivetrain.getInstance();
+    private final Drivetrain drivetrain = Drivetrain.getInstance();
     private final Shooter shooter = Shooter.getInstance();
     private final Intake intake = Intake.getInstance();
-    private final Indexer indexer = Indexer.getInstance();
     private final Verity verity = Verity.getInstance();
     private final Gyroscope gyroscope = Gyroscope.getInstance();
 
@@ -39,7 +41,6 @@ public class BotContainer {
     private final Bot.Alliance alliance;
     private final Bot.Config config;
     private Localizer localizer;
-    private final Logger logger = Logger.getInstance();
 
     public BotContainer(Bot.Alliance alliance, Bot.Config config) {
         this.alliance = alliance;
@@ -78,27 +79,33 @@ public class BotContainer {
             } // overflow!
             case TELE: {
                 // set drivetrain stuff for teleop
-//                drivetrain.setDefaultCommand(new Drive(false, () -> 0, () -> 0, () -> 1));
                 gyroscope.setCurrentHeading(
                         - Constants.Drive.teleStartHeading
                         + gyroscope.getHeading()
                 );
 
                 // drivetrain
-                DriveHeadingPID driveCommand = new DriveHeadingPID(
-                        () -> (1 - .75 * pilot.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER))
+//                DriveHeadingPID driveCommand = new DriveHeadingPID(new DriveHPControls(pilot, copilot));
+                Drive driveCommand = new Drive(true,
+                        () -> pilot.getButton(GamepadKeys.Button.BACK) ? 0
+                                : (1 - 0.75 * pilot.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER))
                                 * pilot.getLeftX(),
-                        () -> (1 - .75 * pilot.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER))
+                        () -> pilot.getButton(GamepadKeys.Button.BACK) ? 0
+                                : (1 - 0.75 * pilot.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER))
                                 * pilot.getLeftY(),
-                        () -> pilot.getRightX(), // multiplier based on right trigger :3
-                        () -> -pilot.getRightY() // multiplier based on right trigger :3
-//                        () -> -(1 - .75 * pilot.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER))
-//                                * pilot.getRightX() // negative because turn is ccw now
+                        () -> pilot.getButton(GamepadKeys.Button.BACK) ? 0
+                                : (1 - 0.75 * pilot.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER))
+                                * -pilot.getRightX()
                 );
-                pilot.getGamepadButton(GamepadKeys.Button.B).whenActive(() -> {
-                    gyroscope.setCurrentHeading(0);
-                    driveCommand.setDesiredHeading(0);
-                }); // reset gyro
+                pilot.getGamepadButton(GamepadKeys.Button.BACK).whenReleased(() -> {
+                    double currentHeading = Math.atan2(
+                            -pilot.getRightY(),
+                            pilot.getRightX()
+                    );
+
+                    gyroscope.setCurrentHeading(currentHeading);
+//                    driveCommand.setDesiredHeading(currentHeading);
+                }); // reset gyro when B is released
                 drivetrain.setDefaultCommand(driveCommand);
 
                 // intake
@@ -144,6 +151,9 @@ public class BotContainer {
                 logger.addEntry("bl", () -> drivetrain.getDriveState().blEncoding);
                 logger.addEntry("br", () -> drivetrain.getDriveState().brEncoding);
             } break;
+            case SPIN: {
+                drivetrain.setDefaultCommand(new Drive(false, () -> 0, () -> 0, () -> 1));
+            } break;
             case CUSTOM: {
 
             } break;
@@ -161,8 +171,6 @@ public class BotContainer {
                         .whenPressed(new InstantCommand(verity::knowEverything));
                 copilot.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
                         .whenPressed(new InstantCommand(verity::speakCow));
-                copilot.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
-                        .whenPressed(new InstantCommand(logger::clearEntries));
             }
             break;
             case LOCALIZATION_TEST: // overflow!
