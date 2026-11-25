@@ -12,7 +12,7 @@ import java.util.function.Supplier;
  * Command that attempts to make the robot trace a path using PID.
  */
 public class PathTracer {
-    private final Drivetrain drivetrain = org.firstinspires.ftc.teamcode.subsystems.Drivetrain.getInstance();
+    private final Drivetrain drivetrain = Drivetrain.getInstance();
     private final Path path;
     private final Supplier<Pose> localizer;
 

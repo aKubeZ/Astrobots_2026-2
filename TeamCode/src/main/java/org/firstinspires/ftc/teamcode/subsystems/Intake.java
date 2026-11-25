@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
@@ -10,22 +11,21 @@ import org.firstinspires.ftc.teamcode.Constants;
  * An intake subsystem.
  */
 public class Intake extends SubsystemBase {
-    private static Intake shooter;
+    private static Intake instance;
     public static synchronized Intake getInstance() {
-        if (shooter == null) shooter = new Intake();
-        return shooter;
+        if (instance == null) instance = new Intake();
+        return instance;
     }
 
-    private final DcMotorEx motor;
+    private final CRServo servo;
     private final boolean disabled = !Constants.Subsystems.intake;
     private Intake() {
-        motor = disabled ? null : Constants.hardwareMap.get(DcMotorEx.class, "in");
+        servo = disabled ? null : Constants.hardwareMap.get(CRServo.class, "in");
         if (disabled) return;
-        motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     public void run(double power) {
         if (disabled) return;
-        motor.setPower(power);
+        servo.setPower(power);
     }
 }

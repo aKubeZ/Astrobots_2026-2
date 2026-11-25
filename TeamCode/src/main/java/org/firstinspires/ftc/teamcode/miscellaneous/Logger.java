@@ -52,13 +52,14 @@ public class Logger extends CommandBase {
         }
     }
 
-    private final ArrayList<Entry> entries;
+    private ArrayList<Entry> entries;
 
     /**
      * Create a data logger
      */
     public Logger() {
-        this.entries = new ArrayList<>();
+        entries = new ArrayList<>();
+        addEntry("# of entries", entries::size);
     }
 
     @Override
@@ -67,6 +68,12 @@ public class Logger extends CommandBase {
         for (Entry entry : entries)
             Constants.telemetry.addData(entry.getName(), entry.getData());
         Constants.telemetry.update();
+    }
+
+    @Override
+    public void end(boolean isFinished) {
+//        clearEntries();
+        addEntry("efinished", () -> 0);
     }
 
     /**
@@ -111,6 +118,8 @@ public class Logger extends CommandBase {
      * Removes all entries.
      */
     public void clearEntries() {
-        entries.clear();
+        // entries.clear doesnt work???
+        addEntry("im tryna remove ok", () -> 0);
+        entries = new ArrayList<>();
     }
 }

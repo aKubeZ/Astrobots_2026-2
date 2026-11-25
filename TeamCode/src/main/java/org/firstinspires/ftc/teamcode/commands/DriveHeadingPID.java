@@ -4,6 +4,7 @@ import com.arcrobotics.ftclib.command.CommandBase;
 
 import org.firstinspires.ftc.teamcode.BotContainer;
 import org.firstinspires.ftc.teamcode.Constants;
+import org.firstinspires.ftc.teamcode.miscellaneous.Logger;
 import org.firstinspires.ftc.teamcode.pid.PIDController;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.miscellaneous.Gyroscope;
@@ -17,6 +18,7 @@ import java.util.function.DoubleSupplier;
 public class DriveHeadingPID extends CommandBase {
     private final Drivetrain drivetrain = org.firstinspires.ftc.teamcode.subsystems.Drivetrain.getInstance();
     private final Gyroscope gyroscope = Gyroscope.getInstance();
+    private final Logger logger = Logger.getInstance();
     private final DoubleSupplier xSupplier;
     private final DoubleSupplier ySupplier;
     private final DoubleSupplier sinSupplier;
@@ -43,6 +45,14 @@ public class DriveHeadingPID extends CommandBase {
         this.cosSupplier = cosSupplier;
         this.sinSupplier = sinSupplier;
         addRequirements(drivetrain);
+        logger.addEntry("heading", () -> gyroscope.getHeading());
+        logger.addEntry("deheading", () -> desiredHeading);
+        logger.addEntry("x", () -> cosSupplier.getAsDouble());
+        logger.addEntry("y", () -> sinSupplier.getAsDouble());
+    }
+
+    public void setDesiredHeading(double heading) {
+        desiredHeading = heading;
     }
 
     @Override
@@ -60,8 +70,9 @@ public class DriveHeadingPID extends CommandBase {
         // if both suppliers are null do nothing
         double desiredCos = cosSupplier.getAsDouble();
         double desiredSin = sinSupplier.getAsDouble();
+        double stickDistance = Math.hypot(desiredSin, desiredCos);
 
-        if (desiredCos != 0 || desiredSin != 0)
+        if (stickDistance > 0.8)
             desiredHeading = Math.atan2(desiredSin, desiredCos);
 
         double driveRot = headingPID.update(

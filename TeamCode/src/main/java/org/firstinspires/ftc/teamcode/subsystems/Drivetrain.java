@@ -127,9 +127,16 @@ public class Drivetrain extends SubsystemBase {
         /*
             [ cos   -sin ] [ x ] = [ x cos - y sin ]
             [ sin    cos ] [ y ] = [ x sin + y cos ]
+            ok this is stupid but like
+            gyroscope 0 is now east so
+            if we're facing east
+            we want left joystick up to be robot moving left
+            so we pretend the robot is facing pi/2 + the eastbasedheading
+            ykw ts finna be in the drive commands
          */
-        double sin = Math.sin(heading);
-        double cos = Math.cos(heading);
+        double angle = Math.PI/2 + -heading; // why the hell did i unflip it before
+        double sin = Math.sin(angle);
+        double cos = Math.cos(angle);
         double robotX = x * cos - y * sin;
         double robotY = x * sin + y * cos;
         driveRobotCentric(robotX, robotY, rot);

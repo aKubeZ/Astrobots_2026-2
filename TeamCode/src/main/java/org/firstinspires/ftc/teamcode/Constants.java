@@ -11,19 +11,23 @@ public class Constants {
     public static Telemetry telemetry = null;
     public static GamepadEx pilot = null;
     public static GamepadEx copilot = null;
+    public static double gyroscopeOffset = Math.PI;
     public static double shooterRPM = 1420;
     public static PIDData shooterPID = new PIDData(0.01, 0, 0);
-
-    public static double intakePower = 1;
-    public static double indexerPower = 0.3;
+    public static double intakePower = -1;
 
 
     public static class Subsystems {
         public static boolean drivetrain = true;
         public static boolean indexer = false;
-        public static boolean intake = false;
+        public static boolean intake = true;
+        public static boolean verity = true;
         public static boolean shooter = false;
-        public static boolean intakeServos = false;
+    }
+
+    public static class Verity {
+        public static double everything = 0.2;
+        public static double cow = 0.6;
     }
 
     public static class Drive {
@@ -34,17 +38,17 @@ public class Constants {
         public static double teleStartHeading = Math.PI / 2;
 
         public static class Coeffs {
-            public static double flY = 1;
-            public static double frY = 1;
+            public static double flY = -1;
+            public static double frY = -1;
             public static double blY = 1;
             public static double brY = 1;
-            public static double flX = 1;
+            public static double flX = -1;
             public static double frX = 1;
-            public static double blX = 1;
+            public static double blX = -1;
             public static double brX = 1;
             public static double flRot = 1;
-            public static double frRot = 1;
-            public static double blRot = 1;
+            public static double frRot = -1;
+            public static double blRot = -1;
             public static double brRot = 1;
         }
     }

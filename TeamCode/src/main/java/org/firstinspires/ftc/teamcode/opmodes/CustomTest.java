@@ -22,9 +22,6 @@ public class CustomTest extends CommandOpMode {
         Constants.copilot = new GamepadEx(gamepad2);
         Constants.Drive.neutralDrivetrain = false;
 
-        Constants.Subsystems.intakeServos = false;
-        Constants.Subsystems.drivetrain = false;
-        Constants.Subsystems.shooter = false;
         bot = new Bot(Bot.OpMode.TELEOP, Bot.Alliance.BLUE, Bot.Config.CUSTOM);
     }
 }

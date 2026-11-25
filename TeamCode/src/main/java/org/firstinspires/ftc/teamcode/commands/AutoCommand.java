@@ -58,12 +58,6 @@ public class AutoCommand extends ParallelCommandGroup {
                     double t = BotContainer.timestamp() - initialTimestamp;
                     if (t < 10) return Constants.shooterRPM;
                     else return 0;
-                }),
-                new RunIndexer(() -> {
-                    double t = BotContainer.timestamp() - initialTimestamp;
-                    if (t < 3) return 0;
-                    else if (t < 10) return Constants.indexerPower;
-                    else return 0;
                 })
         );
     }
